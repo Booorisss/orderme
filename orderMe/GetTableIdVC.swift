@@ -90,7 +90,7 @@ class GetTableIdVC: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         // Check if the metadataObjects array is not nil and it contains at least one object.
         if metadataObjects == nil || metadataObjects.count == 0 {
             qrCodeFrameView?.frame = CGRectZero
-            messageLabel.text = "No barcode/QR code is detected"
+            messageLabel.text = "point the camera at QR code ob the table"
             return
         }
         

@@ -46,7 +46,7 @@ class MakeOrderVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
                 print("error in getting places ")
             } else {
                 do {
-                   // print(data)
+                    // print(data)
                     do {
                         let newdata: NSData = data.dataUsingEncoding(NSUTF8StringEncoding)!
                         let json = try NSJSONSerialization.JSONObjectWithData(newdata, options: .AllowFragments)

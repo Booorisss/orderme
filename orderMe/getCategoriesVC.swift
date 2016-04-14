@@ -21,8 +21,8 @@ class getCategoriesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         loadCategories()
         
         if categories.count == 0 {
-        let cat = Category(id: 1, idPlace: 1, name: "Burgers")
-          categories.append(cat)
+            let cat = Category(id: 1, idPlace: 1, name: "Burgers")
+            categories.append(cat)
             
         }
         
@@ -38,29 +38,29 @@ class getCategoriesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
     func loadCategories() {
         let httpcon = HttpCon()
         
-       
-            httpcon.HTTPGet("\(myUrl)/getMenu?placeId=\(SingleTone.shareInstance.idPlace)&varCase=1") {
-                (data: String, error: String?) -> Void in
-                if error != nil {
-                    print("error in getting places ")
-                } else {
+        
+        httpcon.HTTPGet("\(myUrl)/getMenu?placeId=\(SingleTone.shareInstance.idPlace)&varCase=1") {
+            (data: String, error: String?) -> Void in
+            if error != nil {
+                print("error in getting places ")
+            } else {
+                do {
+                    //print(data)
                     do {
-                        //print(data)
-                        do {
-                            let newdata: NSData = data.dataUsingEncoding(NSUTF8StringEncoding)!
-                            let json = try NSJSONSerialization.JSONObjectWithData(newdata, options: .AllowFragments)
-                            self.categories = self.parseJson(json)
-                            
-                        } catch {
-                            print(error)
-                            
-                        }
+                        let newdata: NSData = data.dataUsingEncoding(NSUTF8StringEncoding)!
+                        let json = try NSJSONSerialization.JSONObjectWithData(newdata, options: .AllowFragments)
+                        self.categories = self.parseJson(json)
+                        
+                    } catch {
+                        print(error)
                         
                     }
+                    
                 }
             }
-            NSThread.sleepForTimeInterval(0.3)
-            
+        }
+        NSThread.sleepForTimeInterval(0.3)
+        
         
     }
     
@@ -91,12 +91,12 @@ class getCategoriesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
     }
     
     
-     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categories.count
     }
     
     
-     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCellWithIdentifier("categoryCell",forIndexPath: indexPath) as? CategoryCell {
             cell.categoryName.text = categories[indexPath.row].name
             cell.id = categories[indexPath.row].id
@@ -109,7 +109,7 @@ class getCategoriesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         return UITableViewCell()
     }
     
-
+    
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let cell = sender as? CategoryCell
@@ -119,12 +119,12 @@ class getCategoriesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
                 Order.categoryName = categoryNameText
                 let sTone = SingleTone.shareInstance
                 sTone.categoryId = cell!.id
-            
+                
                 
             }
             
         }
         
     }
-
+    
 }

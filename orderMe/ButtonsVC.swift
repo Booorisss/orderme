@@ -9,7 +9,7 @@
 import UIKit
 
 class Buttons: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
+    
     let sTone = SingleTone.shareInstance
     
     @IBOutlet weak var myTableView: UITableView!
@@ -17,7 +17,7 @@ class Buttons: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var actions = []
     var photosOfAction = []
-
+    
     
     
     override func viewDidLoad() {
@@ -32,14 +32,14 @@ class Buttons: UIViewController, UITableViewDataSource, UITableViewDelegate {
     }
     
     override func viewWillAppear(animated: Bool) {
- 
+        
         myTableView.reloadData()
-//        myTableView.estimatedRowHeight = myTableView.heightAnchor / 5
+        //        myTableView.estimatedRowHeight = myTableView.heightAnchor / 5
     }
     
     
-
-     func callAWaiter() {
+    
+    func callAWaiter() {
         // 1 - bring a menu
         // 2 - bring a check
         // 3 - clean the table
@@ -71,7 +71,7 @@ class Buttons: UIViewController, UITableViewDataSource, UITableViewDelegate {
         alertController.addAction(cancelAction)
         
         self.presentViewController(alertController, animated: true, completion:nil)
-
+        
         
         
     }
@@ -94,7 +94,7 @@ class Buttons: UIViewController, UITableViewDataSource, UITableViewDelegate {
                 print("callWaiter OK")
             }
         }
-       // NSThread.sleepForTimeInterval(0.3)
+        // NSThread.sleepForTimeInterval(0.3)
         
     }
     
@@ -111,12 +111,12 @@ class Buttons: UIViewController, UITableViewDataSource, UITableViewDelegate {
             cell.actionName!.text = actions[indexPath.row] as? String
             let imageName : String = photosOfAction[indexPath.row] as! String
             cell.actionPhoto?.image = UIImage(named: imageName)
-           
+            
             
             if indexPath.row == 0 {
                 if sTone.tableID != -1 {
-                cell.actionName.textColor = UIColor.greenColor()
-                cell.actionName.text = "Стол номер " + sTone.tableID.description
+                    cell.actionName.textColor = UIColor.greenColor()
+                    cell.actionName.text = "Стол номер " + sTone.tableID.description
                 }
             }
             
@@ -132,23 +132,39 @@ class Buttons: UIViewController, UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         if indexPath.row == 0 {
-            self.navigationController!.pushViewController(self.storyboard!.instantiateViewControllerWithIdentifier("getTable") as! GetTableIdVC, animated: true)
+            //  DEVICE
+            //   self.navigationController!.pushViewController(self.storyboard!.instantiateViewControllerWithIdentifier("getTable") as! GetTableIdVC, animated: true)
+            
+            // SIMULATOR
+            self.navigationController!.pushViewController(self.storyboard!.instantiateViewControllerWithIdentifier("simulatorTable") as! SimulatorTableId, animated: true)
+            
+            
         }
         else if indexPath.row == 1 {
-                self.navigationController!.pushViewController(self.storyboard!.instantiateViewControllerWithIdentifier("getCatVC") as! getCategoriesVC, animated: true)
+            self.navigationController!.pushViewController(self.storyboard!.instantiateViewControllerWithIdentifier("getCatVC") as! getCategoriesVC, animated: true)
         }
             
         else if indexPath.row == 2 {
-        self.navigationController!.pushViewController(self.storyboard!.instantiateViewControllerWithIdentifier("reserveVC") as! DateVC, animated: true)
+            self.navigationController!.pushViewController(self.storyboard!.instantiateViewControllerWithIdentifier("reserveVC") as! DateVC, animated: true)
         }
             
         else if indexPath.row == 3 {
-         callAWaiter()
+            if sTone.tableID != -1 {
+                callAWaiter()
+            }
+            else {
+                let alertController = UIAlertController(title: "Выберете столик", message: "Считайте, пожалуйста, QR code на столе", preferredStyle: .Alert)
+                let okAction = UIAlertAction(title: "Считать QR код", style: .Default) { (action:UIAlertAction!) in
+                    self.navigationController!.pushViewController(self.storyboard!.instantiateViewControllerWithIdentifier("getTable") as! GetTableIdVC, animated: true)
+                }
+                alertController.addAction(okAction)
+                self.presentViewController(alertController, animated: true, completion:nil)
+            }
         }
             
         else if indexPath.row == 4 {
             let phoneNumber = actions[4] as! String
-            let alertController = UIAlertController(title: "Вы уверены?", message: "Вы точно хотите позвонить на номер " + phoneNumber + "?", preferredStyle: .Alert)
+            let alertController = UIAlertController(title: "Позвонить в " + place.name, message: "Вы точно хотите позвонить на номер " + phoneNumber + "?", preferredStyle: .Alert)
             
             
             let okAction = UIAlertAction(title: "Позвонить", style: .Default) { (action:UIAlertAction!) in
@@ -166,7 +182,7 @@ class Buttons: UIViewController, UITableViewDataSource, UITableViewDelegate {
             
             alertController.addAction(okAction)
             alertController.addAction(cancelAction)
-             self.presentViewController(alertController, animated: true, completion:nil)
+            self.presentViewController(alertController, animated: true, completion:nil)
         }
         
     }

@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 
 class BucketVC : UIViewController, UITableViewDataSource, UITableViewDelegate, okAlertProtocol, MyCellProtocol, UITextViewDelegate {
-  
+    
     
     @IBOutlet weak var sumLabel: UILabel!
     @IBOutlet weak var myTableView: UITableView!
@@ -75,11 +75,11 @@ class BucketVC : UIViewController, UITableViewDataSource, UITableViewDelegate, o
     
     @IBAction func makeAnOrder(sender: AnyObject) {
         if sTone.tableID == -1 {
-            let alertController = UIAlertController(title: "Выберите столик", message: "Пожалуйста, вернитесь в основное меню и дайте программе определить за каким столом вы сидите", preferredStyle: .Alert)
+            let alertController = UIAlertController(title: "Выберите столик", message: "Пожалуйста, считайте QR код и программа определит за каким столом вы сидите", preferredStyle: .Alert)
             
             
             let okAction = UIAlertAction(title: "Окей", style: .Default) { (action:UIAlertAction!) in
-            self.navigationController!.pushViewController(self.storyboard!.instantiateViewControllerWithIdentifier("getTable") as! GetTableIdVC, animated: true)
+                self.navigationController!.pushViewController(self.storyboard!.instantiateViewControllerWithIdentifier("getTable") as! GetTableIdVC, animated: true)
             }
             alertController.addAction(okAction)
             
@@ -97,35 +97,35 @@ class BucketVC : UIViewController, UITableViewDataSource, UITableViewDelegate, o
                 self.presentViewController(alertController, animated: true, completion:nil)
             }
             else {
-            let httpcon = HttpCon()
-            httpcon.okDelegate = self
-            var json = sTone.tableID.description + "{"
-            var flag = false
-            for (dish, kol) in bucket.myBucket {
-                flag = true
-                json += dish.id.description + ":" + kol.description + ","
-            }
-            if !flag {
-                json = "{}"
-            }
-            else {
-                
-                json = json.substringToIndex(json.endIndex.predecessor())
-                json += "}"
-                
-            }
-            
-            if let comments = commentText.text {
-                if comments != "Дополнительные комментарии к заказу: " {
-                json += comments
+                let httpcon = HttpCon()
+                httpcon.okDelegate = self
+                var json = sTone.idPlace.description + "/" + sTone.tableID.description + "{"
+                var flag = false
+                for (dish, kol) in bucket.myBucket {
+                    flag = true
+                    json += dish.id.description + ":" + kol.description + ","
                 }
+                if !flag {
+                    json = "{}"
+                }
+                else {
+                    
+                    json = json.substringToIndex(json.endIndex.predecessor())
+                    json += "}"
+                    
+                }
+                
+                if let comments = commentText.text {
+                    if comments != "Дополнительные комментарии к заказу: " {
+                        json += comments
+                    }
+                }
+                
+                print(json)
+                
+                httpcon.post("\(myUrl)/makeorder", bodyData: json)
+                deleteAll(sender)
             }
-            
-            print(json)
-            
-            httpcon.post("\(myUrl)/makeorder", bodyData: json)
-            deleteAll(sender)
-        }
         }
     }
     

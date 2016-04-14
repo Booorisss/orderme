@@ -31,6 +31,7 @@
 		2B2EA7B21CBB0403001507DD /* MakeOrderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2EA7AA1CBB0403001507DD /* MakeOrderVC.swift */; };
 		2B2EA7B31CBB0403001507DD /* getCategoriesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2EA7AB1CBB0403001507DD /* getCategoriesVC.swift */; };
 		2B2EA7B51CBB0542001507DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B2EA7B41CBB0542001507DD /* Assets.xcassets */; };
+		2B2EA7B71CBE4381001507DD /* SimulatorTableId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2EA7B61CBE4381001507DD /* SimulatorTableId.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +62,7 @@
 		2B2EA7AA1CBB0403001507DD /* MakeOrderVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MakeOrderVC.swift; sourceTree = "<group>"; };
 		2B2EA7AB1CBB0403001507DD /* getCategoriesVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = getCategoriesVC.swift; sourceTree = "<group>"; };
 		2B2EA7B41CBB0542001507DD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2B2EA7B61CBE4381001507DD /* SimulatorTableId.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimulatorTableId.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 			children = (
 				2B2EA7A91CBB0403001507DD /* PlacesListVC.swift */,
 				2B2EA7A51CBB0403001507DD /* GetTableIdVC.swift */,
+				2B2EA7B61CBE4381001507DD /* SimulatorTableId.swift */,
 				2B2EA7831CBB03D6001507DD /* ButtonsVC.swift */,
 				2B2EA7A41CBB0403001507DD /* DateVC.swift */,
 				2B2EA7AB1CBB0403001507DD /* getCategoriesVC.swift */,
@@ -225,6 +228,7 @@
 				2B2EA7B11CBB0403001507DD /* PlacesListVC.swift in Sources */,
 				2B2EA7971CBB03D6001507DD /* Protocols.swift in Sources */,
 				2B2EA7951CBB03D6001507DD /* ActionCell.swift in Sources */,
+				2B2EA7B71CBE4381001507DD /* SimulatorTableId.swift in Sources */,
 				2B2EA79E1CBB03D6001507DD /* Place.swift in Sources */,
 				2B2EA7931CBB03D6001507DD /* DishCell.swift in Sources */,
 				2B2EA7B31CBB0403001507DD /* getCategoriesVC.swift in Sources */,
