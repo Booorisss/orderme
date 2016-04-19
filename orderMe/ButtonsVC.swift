@@ -15,6 +15,8 @@ class Buttons: UIViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var myTableView: UITableView!
     var place : Place!
     
+    @IBOutlet weak var placeImage: UIImageView!
+    
     var actions = []
     var photosOfAction = []
     
@@ -25,19 +27,22 @@ class Buttons: UIViewController, UITableViewDataSource, UITableViewDelegate {
         let adress : String = place.adress
         let phoneNumber : String = place.phone
         actions = ["Определить столик","Меню", "Резерв стола", "Вызов официанта", phoneNumber, adress]
-        photosOfAction = ["table","menu2","folkandknife","waiter","phone","adress"]
+        photosOfAction = ["qrcode","list","folkandknife","waiter","phone","adress"]
         myTableView.dataSource = self
         myTableView.delegate = self
         myTableView.scrollEnabled = false
+        
+        placeImage.image = place.image
     }
     
     override func viewWillAppear(animated: Bool) {
-        
+
+
         myTableView.reloadData()
         //        myTableView.estimatedRowHeight = myTableView.heightAnchor / 5
     }
     
-    
+
     
     func callAWaiter() {
         // 1 - bring a menu
@@ -186,6 +191,6 @@ class Buttons: UIViewController, UITableViewDataSource, UITableViewDelegate {
         }
         
     }
-    
+
     
 }

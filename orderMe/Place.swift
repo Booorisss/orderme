@@ -15,6 +15,7 @@ class Place {
     var adress: String = ""
     var phone: String = ""
     
+    var image : UIImage!
  
     
 }

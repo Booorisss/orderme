@@ -11,12 +11,13 @@ import UIKit
 class getCategoriesVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     var categories : [Category] = []
     
+    @IBOutlet weak var myImage: UIImageView!
     @IBOutlet weak var sumLabel: UILabel!
     
     @IBOutlet weak var categoryTableView: UITableView!
     
     let bucket = Bucket.shareInstance
-    
+    let sTone = SingleTone.shareInstance
     override func viewDidLoad() {
         loadCategories()
         
@@ -25,13 +26,16 @@ class getCategoriesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
             categories.append(cat)
             
         }
+        if let p = sTone.place {
+        myImage.image = p.image
+        }
         
         
         
         self.categoryTableView.dataSource = self
     }
     override func viewWillAppear(animated: Bool) {
-        sumLabel.text = bucket.allSum.description
+        
     }
     
     
@@ -117,7 +121,6 @@ class getCategoriesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
             
             if let categoryNameText = cell!.categoryName.text {
                 Order.categoryName = categoryNameText
-                let sTone = SingleTone.shareInstance
                 sTone.categoryId = cell!.id
                 
                 
@@ -126,5 +129,6 @@ class getCategoriesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         }
         
     }
+
     
 }

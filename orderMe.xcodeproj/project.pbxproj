@@ -32,6 +32,7 @@
 		2B2EA7B31CBB0403001507DD /* getCategoriesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2EA7AB1CBB0403001507DD /* getCategoriesVC.swift */; };
 		2B2EA7B51CBB0542001507DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B2EA7B41CBB0542001507DD /* Assets.xcassets */; };
 		2B2EA7B71CBE4381001507DD /* SimulatorTableId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2EA7B61CBE4381001507DD /* SimulatorTableId.swift */; };
+		2BF4D4201CC6DCEF0086ED1E /* UIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF4D41F1CC6DCEF0086ED1E /* UIExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +64,7 @@
 		2B2EA7AB1CBB0403001507DD /* getCategoriesVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = getCategoriesVC.swift; sourceTree = "<group>"; };
 		2B2EA7B41CBB0542001507DD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2B2EA7B61CBE4381001507DD /* SimulatorTableId.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimulatorTableId.swift; sourceTree = "<group>"; };
+		2BF4D41F1CC6DCEF0086ED1E /* UIExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +141,7 @@
 				2B2EA7881CBB03D6001507DD /* Protocols.swift */,
 				2B2EA7891CBB03D6001507DD /* Bucket.swift */,
 				2B2EA78A1CBB03D6001507DD /* Category.swift */,
+				2BF4D41F1CC6DCEF0086ED1E /* UIExtensions.swift */,
 				2B2EA78B1CBB03D6001507DD /* Dish.swift */,
 				2B2EA78C1CBB03D6001507DD /* PlaceCell.swift */,
 				2B2EA78D1CBB03D6001507DD /* HttpCon.swift */,
@@ -242,6 +245,7 @@
 				2B2EA7B01CBB0403001507DD /* BucketVC.swift in Sources */,
 				2B2EA79D1CBB03D6001507DD /* SingleTone.swift in Sources */,
 				2B2EA7AC1CBB0403001507DD /* DateVC.swift in Sources */,
+				2BF4D4201CC6DCEF0086ED1E /* UIExtensions.swift in Sources */,
 				2B2EA7921CBB03D6001507DD /* ButtonsVC.swift in Sources */,
 				2B2EA7B21CBB0403001507DD /* MakeOrderVC.swift in Sources */,
 			);
@@ -381,6 +385,7 @@
 				2B2EA77D1CBB0377001507DD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

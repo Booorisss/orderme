@@ -14,14 +14,17 @@ class MakeOrderVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     var menu : [Dish] = []
     @IBOutlet weak var sumLabel: UILabel!
     
+    @IBOutlet weak var myImage: UIImageView!
     var categoryName = ""
     
     let bucket = Bucket.shareInstance
-    
+    let sTone = SingleTone.shareInstance
     override func viewDidLoad() {
         self.title = categoryName
         loadMenu()
-        
+        if let p = sTone.place {
+            myImage.image = p.image
+        }
         if menu.count == 0 {
             let dish = Dish(id: 1, idPlace: 1, idCategory: 1, name: "The Burger", price: 160, description: "ammmmmm")
             menu.append(dish)
@@ -38,7 +41,6 @@ class MakeOrderVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     func loadMenu(){
         let httpcon = HttpCon()
-        let sTone = SingleTone.shareInstance
         let catId = sTone.categoryId
         httpcon.HTTPGet("\(myUrl)/getMenu?placeId=\(SingleTone.shareInstance.idPlace)&varCase=2&categoryId=\(catId)") {
             (data: String, error: String?) -> Void in

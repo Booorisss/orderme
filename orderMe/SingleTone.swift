@@ -12,7 +12,7 @@
 import Foundation
 
 let myLocalUrl = "http://localhost:8080"
-let googleUrl = "http://iorder.appspot.com"
+let googleUrl = "http://orderme-1286.appspot.com"
 
 let myUrl = myLocalUrl
 
@@ -29,5 +29,6 @@ class SingleTone : NSObject {
     
     var tableID = -1
     
+    var place : Place? = nil
     
 }

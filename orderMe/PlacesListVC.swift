@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Foundation
 class PlacesList: UITableViewController {
     
     
@@ -25,13 +25,14 @@ class PlacesList: UITableViewController {
         getPlaces()
         
         // ----------
-        if places.count == 0 {
+        while places.count == 0 {
             let place = Place()
-            place.name = "The Burger"
-            place.adress = "asda"
+            place.name = "Downloading places"
+            place.adress = "....."
             place.id = 1
-            place.phone = "230432402"
+            place.phone = ""
             places.append(place)
+            NSThread.sleepForTimeInterval(0.3)
         }
         // ----------
         
@@ -39,6 +40,31 @@ class PlacesList: UITableViewController {
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
+    }
+    override func viewDidAppear(animated: Bool) {
+        setupNaviBar()
+    }
+    
+    func setupNaviBar(){
+        // 1
+        let nav = self.navigationController?.navigationBar
+        // 2
+        nav?.barStyle = UIBarStyle.BlackTranslucent
+        nav?.tintColor = UIColor.darkGrayColor()
+        let imageView1 = UIImageView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+        imageView1.contentMode = .ScaleAspectFit
+        // 4
+        let image1 = UIImage(named: "back")
+        imageView1.image = image1
+        navigationItem.leftBarButtonItem?.customView = imageView1
+        //3
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+        imageView.contentMode = .ScaleAspectFit
+        // 4
+        let image = UIImage(named: "menu2")
+        imageView.image = image
+        // 5
+        navigationItem.titleView = imageView
     }
     
     func filterContentForSearchText(searchText: String, scope: String = "All") {
@@ -99,6 +125,28 @@ class PlacesList: UITableViewController {
                 pl.name = (json["name"] as AnyObject? as? String) ?? "" // to get rid of null
                 pl.adress = (json["adress"] as AnyObject? as? String) ?? ""
                 pl.phone = (json["phone"] as AnyObject? as? String) ?? ""
+                var byteAr = (json["image"] as AnyObject? as? [Int]) ?? []
+                var i = 0
+                
+                
+                var newbyteAr : [UInt8] = []
+                for _ in byteAr {
+                    var q : UInt8 = 0
+                    if byteAr[i] < 0 {
+                        q = UInt8(256 + byteAr[i])
+                    }
+                    else {
+                        q = UInt8(byteAr[i])
+                    }
+                    newbyteAr.append(q)
+                    i += 1
+                }
+                
+                
+                let dataIm = NSData(bytes: newbyteAr, length: newbyteAr.count)
+                let image = UIImage(data: dataIm)
+                pl.image = image
+                
                 
                 list.append(pl)
             }// for
@@ -127,12 +175,14 @@ class PlacesList: UITableViewController {
                 cell.id = filteredPlaces[indexPath.row].id
                 cell.placeAdress.text = filteredPlaces[indexPath.row].adress
                 cell.place = filteredPlaces[indexPath.row]
+                cell.placeImage.image = filteredPlaces[indexPath.row].image
             }
             else{
                 cell.placeName.text = places[indexPath.row].name
                 cell.id = places[indexPath.row].id
                 cell.placeAdress.text = places[indexPath.row].adress
                 cell.place = places[indexPath.row]
+                cell.placeImage.image = places[indexPath.row].image
             }
             //  cell.lastMsg.font = UIFont(name: "Arial", size: 15)
             
@@ -147,7 +197,7 @@ class PlacesList: UITableViewController {
         if let Twobut = segue.destinationViewController as? Buttons {
             Twobut.place = cell!.place
             sTone.idPlace = cell!.id
-            
+            sTone.place = cell!.place
         }
         
     }
@@ -162,3 +212,8 @@ extension PlacesList: UISearchResultsUpdating {
         filterContentForSearchText(searchController.searchBar.text!)
     }
 }
+
+
+
+
+

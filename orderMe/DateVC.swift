@@ -16,9 +16,12 @@ class DateVC: UIViewController, okAlertProtocol{
     
     
     var chosenDate = ""
+    let sTone = SingleTone.shareInstance
     
     override func viewDidLoad() {
-      
+        if let p = sTone.place {
+            myImageView.image = p.image
+        }
     }
     
     
@@ -40,7 +43,6 @@ class DateVC: UIViewController, okAlertProtocol{
         
         let httpcon = HttpCon()
         httpcon.okDelegate = self
-        let sTone = SingleTone.shareInstance
         let idPlace = sTone.idPlace
         if let phoneNumber = phoneText.text {
         
