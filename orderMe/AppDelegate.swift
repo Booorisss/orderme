@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
       //  UIApplication.sharedApplication().statusBarStyle = .BlackOpaque
         NSThread.sleepForTimeInterval(1.5)
+        
         return true
     }
 

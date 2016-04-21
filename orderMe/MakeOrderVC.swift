@@ -26,8 +26,10 @@ class MakeOrderVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             myImage.image = p.image
         }
         if menu.count == 0 {
-            let dish = Dish(id: 1, idPlace: 1, idCategory: 1, name: "The Burger", price: 160, description: "ammmmmm")
+            let dish = Dish(id: 1, idPlace: 1, idCategory: 1, name: "Chocolate Macarun", price: 30, description: "Best macarun in Kiev")
             menu.append(dish)
+            let dish1 = Dish(id: 2, idPlace: 1, idCategory: 1, name: "Strawberry Macarun", price: 30, description: "Delicious macarun ")
+            menu.append(dish1)
         }
         
         
@@ -139,6 +141,12 @@ class MakeOrderVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     func deleteDish(dish: Dish) {
         bucket.allSum -= dish.price
         sumLabel.text = bucket.allSum.description
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let backItem = UIBarButtonItem()
+        backItem.title = ""
+        navigationItem.backBarButtonItem = backItem
     }
     
     

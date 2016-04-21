@@ -22,7 +22,7 @@ class getCategoriesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         loadCategories()
         
         if categories.count == 0 {
-            let cat = Category(id: 1, idPlace: 1, name: "Burgers")
+            let cat = Category(id: 1, idPlace: 1, name: "Macaruns")
             categories.append(cat)
             
         }
@@ -35,7 +35,7 @@ class getCategoriesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         self.categoryTableView.dataSource = self
     }
     override func viewWillAppear(animated: Bool) {
-        
+        sumLabel.text = bucket.allSum.description
     }
     
     
@@ -122,7 +122,9 @@ class getCategoriesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
             if let categoryNameText = cell!.categoryName.text {
                 Order.categoryName = categoryNameText
                 sTone.categoryId = cell!.id
-                
+                let backItem = UIBarButtonItem()
+                backItem.title = ""
+                navigationItem.backBarButtonItem = backItem
                 
             }
             

@@ -23,6 +23,8 @@ class Buttons: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     
     override func viewDidLoad() {
+        let nav = self.navigationController?.navigationBar
+        nav?.barStyle = .Default
         self.title = place.name
         let adress : String = place.adress
         let phoneNumber : String = place.phone
@@ -33,6 +35,7 @@ class Buttons: UIViewController, UITableViewDataSource, UITableViewDelegate {
         myTableView.scrollEnabled = false
         
         placeImage.image = place.image
+    
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -117,7 +120,6 @@ class Buttons: UIViewController, UITableViewDataSource, UITableViewDelegate {
             let imageName : String = photosOfAction[indexPath.row] as! String
             cell.actionPhoto?.image = UIImage(named: imageName)
             
-            
             if indexPath.row == 0 {
                 if sTone.tableID != -1 {
                     cell.actionName.textColor = UIColor.greenColor()
@@ -135,13 +137,16 @@ class Buttons: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let backItem = UIBarButtonItem()
+        backItem.title = ""
+        navigationItem.backBarButtonItem = backItem
         
         if indexPath.row == 0 {
             //  DEVICE
-            //   self.navigationController!.pushViewController(self.storyboard!.instantiateViewControllerWithIdentifier("getTable") as! GetTableIdVC, animated: true)
+               self.navigationController!.pushViewController(self.storyboard!.instantiateViewControllerWithIdentifier("getTable") as! GetTableIdVC, animated: true)
             
             // SIMULATOR
-            self.navigationController!.pushViewController(self.storyboard!.instantiateViewControllerWithIdentifier("simulatorTable") as! SimulatorTableId, animated: true)
+            //self.navigationController!.pushViewController(self.storyboard!.instantiateViewControllerWithIdentifier("simulatorTable") as! SimulatorTableId, animated: true)
             
             
         }

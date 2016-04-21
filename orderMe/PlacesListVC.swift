@@ -25,47 +25,26 @@ class PlacesList: UITableViewController {
         getPlaces()
         
         // ----------
-        while places.count == 0 {
+        if places.count == 0 {
             let place = Place()
-            place.name = "Downloading places"
-            place.adress = "....."
+            place.name = "The Cake"
+            place.adress = "Красноармейская, 1"
             place.id = 1
-            place.phone = ""
+            place.phone = "0673647327"
+            place.image = UIImage(named: "TheCake")
             places.append(place)
             NSThread.sleepForTimeInterval(0.3)
         }
         // ----------
         
+        
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
-    }
-    override func viewDidAppear(animated: Bool) {
-        setupNaviBar()
+        
     }
     
-    func setupNaviBar(){
-        // 1
-        let nav = self.navigationController?.navigationBar
-        // 2
-        nav?.barStyle = UIBarStyle.BlackTranslucent
-        nav?.tintColor = UIColor.darkGrayColor()
-        let imageView1 = UIImageView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-        imageView1.contentMode = .ScaleAspectFit
-        // 4
-        let image1 = UIImage(named: "back")
-        imageView1.image = image1
-        navigationItem.leftBarButtonItem?.customView = imageView1
-        //3
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-        imageView.contentMode = .ScaleAspectFit
-        // 4
-        let image = UIImage(named: "menu2")
-        imageView.image = image
-        // 5
-        navigationItem.titleView = imageView
-    }
     
     func filterContentForSearchText(searchText: String, scope: String = "All") {
         filteredPlaces = places.filter { place in
@@ -76,6 +55,9 @@ class PlacesList: UITableViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
+        let nav = self.navigationController?.navigationBar
+        nav?.barStyle = .Black
+        self.title = "OrderME"
         bucket.myBucket = [:]
         bucket.allSum = 0
         sTone.tableID = -1
@@ -183,8 +165,10 @@ class PlacesList: UITableViewController {
                 cell.placeAdress.text = places[indexPath.row].adress
                 cell.place = places[indexPath.row]
                 cell.placeImage.image = places[indexPath.row].image
+                
             }
-            //  cell.lastMsg.font = UIFont(name: "Arial", size: 15)
+            cell.placeName.backgroundColor = UIColor.darkGrayColor().colorWithAlphaComponent(0.3)
+            cell.placeAdress.backgroundColor = UIColor.darkGrayColor().colorWithAlphaComponent(0.3)
             
             return cell
         }
@@ -198,6 +182,9 @@ class PlacesList: UITableViewController {
             Twobut.place = cell!.place
             sTone.idPlace = cell!.id
             sTone.place = cell!.place
+            let backItem = UIBarButtonItem()
+            backItem.title = ""
+            navigationItem.backBarButtonItem = backItem
         }
         
     }
