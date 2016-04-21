@@ -29,7 +29,7 @@ class Buttons: UIViewController, UITableViewDataSource, UITableViewDelegate {
         let adress : String = place.adress
         let phoneNumber : String = place.phone
         actions = ["Определить столик","Меню", "Резерв стола", "Вызов официанта", phoneNumber, adress]
-        photosOfAction = ["qrcode","list","folkandknife","waiter","phone","adress"]
+        photosOfAction = ["qrcode","list","folkandknife","Waiter","phone","adress"]
         myTableView.dataSource = self
         myTableView.delegate = self
         myTableView.scrollEnabled = false
