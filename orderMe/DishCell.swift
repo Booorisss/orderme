@@ -14,7 +14,8 @@ class DishCell: UITableViewCell {
     @IBOutlet weak var numberOfItemsLabel: UILabel!
     @IBOutlet weak var priceLabel: UILabel!
     
-    @IBOutlet weak var dishDescription: UILabel!
+    
+    
     
     var dish : Dish!
     
@@ -24,6 +25,8 @@ class DishCell: UITableViewCell {
     
     var cellDelegate : MyCellProtocol?
     
+    var infoD : infoDish?
+    
     @IBAction func addItem(sender: AnyObject) {
         numberOfItems += 1
         
@@ -32,6 +35,9 @@ class DishCell: UITableViewCell {
         
     }
     
+    @IBAction func infoBut(sender: AnyObject) {
+        infoD?.showInfoDish(self.dish)
+    }
     
     
     @IBAction func deleteItem(sender: AnyObject) {

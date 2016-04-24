@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MakeOrderVC: UIViewController, UITableViewDelegate, UITableViewDataSource, MyCellProtocol {
+class MakeOrderVC: UIViewController, UITableViewDelegate, UITableViewDataSource, MyCellProtocol, infoDish {
     
     @IBOutlet weak var orderTableView: UITableView!
     var menu : [Dish] = []
@@ -19,7 +19,9 @@ class MakeOrderVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     let bucket = Bucket.shareInstance
     let sTone = SingleTone.shareInstance
+    
     override func viewDidLoad() {
+        self.navigationController?.navigationBarHidden = true
         self.title = categoryName
         loadMenu()
         if let p = sTone.place {
@@ -34,6 +36,7 @@ class MakeOrderVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         
         
         self.orderTableView.dataSource = self
+        
         
     }
     override func viewWillAppear(animated: Bool) {
@@ -110,13 +113,10 @@ class MakeOrderVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             cell.dishName.text = menu[indexPath.row].name
             cell.dish = menu[indexPath.row]
             cell.priceLabel.text = String(menu[indexPath.row].price)
-            cell.dishDescription.text = menu[indexPath.row].dishDescription
             getNumberofItems(cell)
             cell.numberOfItemsLabel.text = cell.numberOfItems.description
-            
-            
-            //            cell.lastMsg.font = UIFont(name: "Arial", size: 15)
             cell.cellDelegate = self
+            cell.infoD = self
             return cell
         }
         
@@ -143,6 +143,18 @@ class MakeOrderVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
         sumLabel.text = bucket.allSum.description
     }
     
+    
+    
+    func showInfoDish(d: Dish) {
+        let alertController = UIAlertController(title: "Информация о блюде", message: d.dishDescription, preferredStyle: .Alert)
+        let okAction = UIAlertAction(title: "окей", style: .Default) { (action:UIAlertAction!) in
+           
+        }
+        alertController.addAction(okAction)
+        
+        self.presentViewController(alertController, animated: true, completion:nil)
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let backItem = UIBarButtonItem()
         backItem.title = ""
@@ -151,5 +163,13 @@ class MakeOrderVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     
     
+    
+    @IBAction func backButton(sender: AnyObject) {
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+    
+    @IBAction func gest(sender: AnyObject) {
+        self.navigationController?.popViewControllerAnimated(true)
+    }
     
 }

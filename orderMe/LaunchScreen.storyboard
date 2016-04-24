@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="iOrder" translatesAutoresizingMaskIntoConstraints="NO" id="DQc-1j-ucs">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="iOrder-1" translatesAutoresizingMaskIntoConstraints="NO" id="DQc-1j-ucs">
                                 <rect key="frame" x="0.0" y="0.0" width="421" height="736"/>
                             </imageView>
                         </subviews>
@@ -31,6 +31,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="iOrder" width="719" height="1280"/>
+        <image name="iOrder-1" width="571" height="1016"/>
     </resources>
 </document>

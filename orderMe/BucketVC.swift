@@ -9,7 +9,7 @@
 import UIKit
 import Foundation
 
-class BucketVC : UIViewController, UITableViewDataSource, UITableViewDelegate, okAlertProtocol, MyCellProtocol, UITextViewDelegate {
+class BucketVC : UIViewController, UITableViewDataSource, UITableViewDelegate, okAlertProtocol, MyCellProtocol, UITextViewDelegate, UIScrollViewDelegate {
     
     
     @IBOutlet weak var sumLabel: UILabel!
@@ -30,8 +30,11 @@ class BucketVC : UIViewController, UITableViewDataSource, UITableViewDelegate, o
     
     override func viewDidLoad() {
         makeBucket()
+        commentText.backgroundColor = UIColor.lightGrayColor().colorWithAlphaComponent(0.3)
+        myTableView.backgroundColor = UIColor.lightGrayColor().colorWithAlphaComponent(0)
         myTableView.dataSource = self
         commentText.delegate = self
+        myTableView.delegate = self
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -57,10 +60,15 @@ class BucketVC : UIViewController, UITableViewDataSource, UITableViewDelegate, o
             
             //  cell.lastMsg.font = UIFont(name: "Arial", size: 15)
             cell.cellDelegate = self
+            cell.backgroundColor = UIColor.lightGrayColor().colorWithAlphaComponent(0)
             return cell
         }
         
         return UITableViewCell()
+    }
+    
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        view.endEditing(true)
     }
     
     @IBAction func deleteAll(sender: AnyObject) {
@@ -177,4 +185,7 @@ class BucketVC : UIViewController, UITableViewDataSource, UITableViewDelegate, o
         //myTableView.reloadData()
     }
     
+    @IBAction func backButton(sender: AnyObject) {
+        self.navigationController?.popViewControllerAnimated(true)
+    }
 }

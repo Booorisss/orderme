@@ -11,6 +11,13 @@ import UIKit
 class SimulatorTableId: UIViewController {
 
     @IBOutlet weak var tid: UITextField!
+    
+    override func viewDidLoad() {
+        navigationController?.navigationBarHidden = false
+    }
+    
+    
+    
     @IBAction func button(sender: AnyObject) {
         if let myTableId = Int(tid.text!){
             let sTone = SingleTone.shareInstance
@@ -19,4 +26,6 @@ class SimulatorTableId: UIViewController {
         }
         
     }
+    
+
 }

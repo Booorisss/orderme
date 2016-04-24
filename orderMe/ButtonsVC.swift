@@ -23,8 +23,6 @@ class Buttons: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     
     override func viewDidLoad() {
-        let nav = self.navigationController?.navigationBar
-        nav?.barStyle = .Default
         self.title = place.name
         let adress : String = place.adress
         let phoneNumber : String = place.phone
@@ -39,7 +37,7 @@ class Buttons: UIViewController, UITableViewDataSource, UITableViewDelegate {
     }
     
     override func viewWillAppear(animated: Bool) {
-
+    navigationController?.navigationBarHidden = true
 
         myTableView.reloadData()
         //        myTableView.estimatedRowHeight = myTableView.heightAnchor / 5
@@ -122,7 +120,7 @@ class Buttons: UIViewController, UITableViewDataSource, UITableViewDelegate {
             
             if indexPath.row == 0 {
                 if sTone.tableID != -1 {
-                    cell.actionName.textColor = UIColor.greenColor()
+                    //cell.actionName.textColor = UIColor.greenColor()
                     cell.actionName.text = "Стол номер " + sTone.tableID.description
                 }
             }
@@ -143,7 +141,7 @@ class Buttons: UIViewController, UITableViewDataSource, UITableViewDelegate {
         
         if indexPath.row == 0 {
             //  DEVICE
-               self.navigationController!.pushViewController(self.storyboard!.instantiateViewControllerWithIdentifier("getTable") as! GetTableIdVC, animated: true)
+              self.navigationController!.pushViewController(self.storyboard!.instantiateViewControllerWithIdentifier("getTable") as! GetTableIdVC, animated: true)
             
             // SIMULATOR
             //self.navigationController!.pushViewController(self.storyboard!.instantiateViewControllerWithIdentifier("simulatorTable") as! SimulatorTableId, animated: true)
@@ -196,6 +194,10 @@ class Buttons: UIViewController, UITableViewDataSource, UITableViewDelegate {
         }
         
     }
+    
 
+    @IBAction func backButton(sender: AnyObject) {
+        navigationController?.popViewControllerAnimated(true)
+    }
     
 }

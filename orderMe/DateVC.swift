@@ -19,6 +19,7 @@ class DateVC: UIViewController, okAlertProtocol{
     let sTone = SingleTone.shareInstance
     
     override func viewDidLoad() {
+        self.navigationController?.navigationBarHidden = true
         if let p = sTone.place {
             myImageView.image = p.image
         }
@@ -28,7 +29,17 @@ class DateVC: UIViewController, okAlertProtocol{
     
     @IBAction func bookTable(sender: AnyObject) {
         
-      
+        if phoneText.text == "" {
+            let alertController = UIAlertController(title: "Не хватает Вашего номера телефона", message: "Укажите, пожалуйста, Ваш номер телефона", preferredStyle: .Alert)
+            
+            
+            let okAction = UIAlertAction(title: "Добавить номер", style: .Default) { (action:UIAlertAction!) in
+                
+            }
+            alertController.addAction(okAction)
+            
+            self.presentViewController(alertController, animated: true, completion:nil)
+        }
         
         let dateFormatter = NSDateFormatter()
         
@@ -82,5 +93,10 @@ class DateVC: UIViewController, okAlertProtocol{
         self.presentViewController(alertController, animated: true, completion:nil)
         
     }
+    
+    @IBAction func backButton(sender: AnyObject) {
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+    
     
 }

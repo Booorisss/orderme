@@ -23,6 +23,7 @@ class PlacesList: UITableViewController {
     
     override func viewDidLoad() {
         getPlaces()
+        navigationController?.navigationBarHidden = true
         
         // ----------
         if places.count == 0 {

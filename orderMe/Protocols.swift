@@ -17,3 +17,7 @@ protocol okAlertProtocol {
     func okAlert()
     func notOkAlert()
 }
+
+protocol infoDish {
+    func showInfoDish(dish: Dish)
+}

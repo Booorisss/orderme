@@ -14,6 +14,7 @@ class getCategoriesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
     @IBOutlet weak var myImage: UIImageView!
     @IBOutlet weak var sumLabel: UILabel!
     
+    @IBOutlet weak var bucketButton: UIButton!
     @IBOutlet weak var categoryTableView: UITableView!
     
     let bucket = Bucket.shareInstance
@@ -30,9 +31,13 @@ class getCategoriesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         myImage.image = p.image
         }
         
-        
+        self.navigationController?.navigationBarHidden = true
         
         self.categoryTableView.dataSource = self
+        
+          // sumLabel.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
+          // bucketButton.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
+        
     }
     override func viewWillAppear(animated: Bool) {
         sumLabel.text = bucket.allSum.description
@@ -132,5 +137,9 @@ class getCategoriesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         
     }
 
+    
+    @IBAction func backButton(sender: AnyObject) {
+        self.navigationController?.popViewControllerAnimated(true)
+    }
     
 }

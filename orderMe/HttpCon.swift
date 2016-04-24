@@ -130,6 +130,9 @@ class HttpCon: NSObject {
                     self.okDelegate?.notOkAlert()
                 }
             }
+            else {
+                self.okDelegate?.notOkAlert()
+            }
         }
         
     }
@@ -153,6 +156,9 @@ class HttpCon: NSObject {
                 else {
                     self.okDelegate?.notOkAlert()
                 }
+            }
+            else {
+                self.okDelegate?.notOkAlert()
             }
         }
     }

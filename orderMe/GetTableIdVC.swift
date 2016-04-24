@@ -29,7 +29,7 @@ class GetTableIdVC: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         // Get an instance of the AVCaptureDevice class to initialize a device object and provide the video
         // as the media type parameter.
         
-        
+        navigationController?.navigationBarHidden = false
         
         let captureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
         
@@ -90,7 +90,7 @@ class GetTableIdVC: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         // Check if the metadataObjects array is not nil and it contains at least one object.
         if metadataObjects == nil || metadataObjects.count == 0 {
             qrCodeFrameView?.frame = CGRectZero
-            messageLabel.text = "point the camera at QR code ob the table"
+            messageLabel.text = "Наведите камеру на QR код"
             return
         }
         
