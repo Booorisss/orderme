@@ -23,7 +23,9 @@ class MakeOrderVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     override func viewDidLoad() {
         self.navigationController?.navigationBarHidden = true
         self.title = categoryName
+        orderTableView.backgroundColor = UIColor.lightGrayColor().colorWithAlphaComponent(0)
         loadMenu()
+        
         if let p = sTone.place {
             myImage.image = p.image
         }
@@ -117,6 +119,7 @@ class MakeOrderVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             cell.numberOfItemsLabel.text = cell.numberOfItems.description
             cell.cellDelegate = self
             cell.infoD = self
+            cell.backgroundColor = UIColor.lightGrayColor().colorWithAlphaComponent(0)
             return cell
         }
         

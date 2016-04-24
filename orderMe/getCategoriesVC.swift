@@ -22,6 +22,7 @@ class getCategoriesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
     override func viewDidLoad() {
         loadCategories()
         
+        categoryTableView.backgroundColor = UIColor.lightGrayColor().colorWithAlphaComponent(0)
         if categories.count == 0 {
             let cat = Category(id: 1, idPlace: 1, name: "Macaruns")
             categories.append(cat)
@@ -111,6 +112,7 @@ class getCategoriesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
             cell.id = categories[indexPath.row].id
             
             //            cell.lastMsg.font = UIFont(name: "Arial", size: 15)
+            cell.backgroundColor = UIColor.darkGrayColor().colorWithAlphaComponent(0)
             
             return cell
         }
