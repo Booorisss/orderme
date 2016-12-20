@@ -6,35 +6,40 @@
 //  Copyright © 2016 Boris Gurtovoy. All rights reserved.
 //
 
-import Foundation
+import ObjectMapper
 
-class Dish : NSObject {
+class Dish : Mappable {
     
-    let id : Int
-    let idPlace : Int
-    let idCategory: Int
-    let name : String
-    let price : Int
-    let dishDescription : String
+    var id : Int?
+    var place : Place?
+    var category: Category?
+    var name : String?
+    var price : Int?
+    var dishDescription : String?
     
     
-    init ( id: Int , idPlace : Int, idCategory: Int,  name: String, price: Int, description: String){
+    required init?(map: Map) {
+        
+    }
+    
+    
+    init ( id: Int , place : Place, category: Category,  name: String, price: Int, description: String, oneprice: Bool){
         self.id = id
-        self.idPlace = idPlace
-        self.idCategory = idCategory
+        self.place = place
+        self.category = category
         self.name = name
         self.price = price
         self.dishDescription = description
     }
-    
-    override func isEqual(object: AnyObject?) -> Bool {
-        if let object = object as? Dish {
-            return id == object.id && idPlace == object.idPlace && name == object.name && price == object.price && description == object.description
-        } else {
-            return false
-        }
+  
+    func mapping(map: Map) {
+        id              <- map["id"]
+        place           <- map["place"]
+        category        <- map["category"]
+        name            <- map["name"]
+        price           <- map["price"]
+        dishDescription <- map["dishDescription"]
+        
     }
-
-    
     
 }

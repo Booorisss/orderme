@@ -11,24 +11,42 @@
 
 import Foundation
 
-let myLocalUrl = "http://localhost:8080"
+let localUrl = "http://localhost:8080"
 let googleUrl = "http://orderme-1286.appspot.com"
+let frankfurtUrl = "http://139.59.159.173:8080/OrderMe%5FV4/"
 
-let myUrl = myLocalUrl
+let myUrl =  frankfurtUrl
 
 
 class SingleTone : NSObject {
     
-    private override init(){}
+    fileprivate override init(){}
     
     static let shareInstance = SingleTone()
     
-    var idPlace = 0
-    
-    var categoryId = 0
+    var allplaces : [Place] = []
+    var place : Place!
     
     var tableID = -1
+
+    var categoriesOnePrice : [Int : Int] = [:]  // ids of one price categories, that are already in the bucket
     
-    var place : Place? = nil
+    var placeIdValidation = -1
+    
+    var qrcodeWasDetected = false
+    
+    
+    func makePlace(_ id: Int){
+        for myplace in allplaces {
+            if myplace.id == id {
+                place = myplace
+            }
+        }
+    }
+    
+    
     
 }
+
+
+

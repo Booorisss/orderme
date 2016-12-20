@@ -10,7 +10,7 @@ import Foundation
 
 class Bucket : NSObject {
     
-    private override init(){}
+    fileprivate override init(){}
     
     static let shareInstance = Bucket()
     

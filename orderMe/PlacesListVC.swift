@@ -8,37 +8,38 @@
 
 import UIKit
 import Foundation
-class PlacesList: UITableViewController {
+import CoreLocation
+class PlacesList: UITableViewController, CLLocationManagerDelegate {
     
     
     let searchController = UISearchController(searchResultsController: nil)
     
-    
+    // all Places
     var places = [Place]()
+    
+    // Places after Search
     var filteredPlaces = [Place]()
     
-    let bucket = Bucket.shareInstance
+    // User location
+    let locationManager = CLLocationManager()
+    var firstLocation = true
+    var lastLocation = CLLocation()
     
-    let sTone = SingleTone.shareInstance
     
     override func viewDidLoad() {
-        getPlaces()
-        navigationController?.navigationBarHidden = true
         
-        // ----------
-        if places.count == 0 {
-            let place = Place()
-            place.name = "The Cake"
-            place.adress = "Красноармейская, 1"
-            place.id = 1
-            place.phone = "0673647327"
-            place.image = UIImage(named: "TheCake")
-            places.append(place)
-            NSThread.sleepForTimeInterval(0.3)
+        // LocationManager initializing
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            self.locationManager.requestWhenInUseAuthorization()
+            locationManager.startUpdatingLocation()
         }
-        // ----------
         
+        // async Places downloading
+        getPlaces()
         
+        // searchControllerDelegate
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
@@ -47,161 +48,197 @@ class PlacesList: UITableViewController {
     }
     
     
-    func filterContentForSearchText(searchText: String, scope: String = "All") {
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        locationManager.startUpdatingLocation()
+        
+        let logo = UIImage(named: "orderme")
+        let imageView = UIImageView(image:logo)
+        imageView.frame = CGRect(x: 0,y: 0,  width: 21, height: 21)
+        imageView.contentMode = .scaleAspectFit
+        navigationItem.titleView = imageView
+        navigationController?.isNavigationBarHidden = false
+        //tableView.reloadData()
+        
+        
+        // General Case, user did NOT read the QR code
+        
+        if !SingleTone.shareInstance.qrcodeWasDetected{
+            Bucket.shareInstance.myBucket = [:]
+            Bucket.shareInstance.allSum = 0
+            SingleTone.shareInstance.tableID = -1
+            Menu.shareInstance.deleteMenu()
+        }
+        
+        
+        
+        // If User read QRCODE
+        if SingleTone.shareInstance.qrcodeWasDetected {
+            SingleTone.shareInstance.qrcodeWasDetected = false
+            if let PlaceMainMenuVC = self.storyboard?.instantiateViewController(withIdentifier: "PlaceMainMenu") as? PlaceMainMenu {
+                self.navigationController?.pushViewController(PlaceMainMenuVC, animated: true)
+            }
+        }
+        
+    }
+    
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        locationManager.stopUpdatingLocation()
+    }
+    
+    
+    
+    
+    // async getting Array of places from API
+    func getPlaces(){
+        NetworkClient.getPlaces { (placesOpt, error) in
+            if error != nil {
+                return
+            }
+            guard let places = placesOpt else {
+                return
+            }
+            self.places = places
+            SingleTone.shareInstance.allplaces = self.places
+            self.tableView.reloadData()
+        }
+    }
+    
+    
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let cell = sender as? PlaceCell
+        if let PlaceMenu = segue.destination as? PlaceMainMenu {
+            PlaceMenu.place = cell!.place
+            SingleTone.shareInstance.place = cell!.place
+            guard let id = cell?.place.id else {
+                return
+            }
+            SingleTone.shareInstance.placeIdValidation = id
+            let backItem = UIBarButtonItem()
+            backItem.title = ""
+            navigationItem.backBarButtonItem = backItem
+        }
+        
+        if let QrCoder = segue.destination as? GetTableIdVC {
+            QrCoder.noPlace = true
+        }
+        
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        let myLocation = locations.last
+        if firstLocation || lastLocation.distance(from: myLocation!) > 100  {
+            for place in self.places{
+                guard let placeLatitude = place.latitude,
+                    let placeLongitute = place.longitude else {
+                        return
+                }
+                let lat1 : NSString = placeLatitude as NSString
+                let lng1 : NSString = placeLongitute as NSString
+                
+                let latitute: CLLocationDegrees =  lat1.doubleValue
+                let longitute: CLLocationDegrees =  lng1.doubleValue
+                let placeLocation = CLLocation(latitude: latitute, longitude: longitute)
+                let d =  myLocation!.distance(from: placeLocation) / 1000
+                place.distance = Double(round(10*d)/10)
+                
+                firstLocation = false
+                
+            }
+            lastLocation = myLocation!
+            
+            tableView.reloadData()
+        }
+        
+    }
+    
+    
+}
+
+
+// Mark : UISearchResultsUpdating
+extension PlacesList: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchController.searchBar.text!)
+    }
+    
+    func filterContentForSearchText(_ searchText: String, scope: String = "All") {
         filteredPlaces = places.filter { place in
-            return place.name.lowercaseString.containsString(searchText.lowercaseString)
+            guard let name = place.name else {
+                return false
+            }
+            return name.lowercased().contains(searchText.lowercased())
         }
         
         tableView.reloadData()
     }
-    
-    override func viewWillAppear(animated: Bool) {
-        let nav = self.navigationController?.navigationBar
-        nav?.barStyle = .Black
-        self.title = "OrderME"
-        bucket.myBucket = [:]
-        bucket.allSum = 0
-        sTone.tableID = -1
-    }
-    
-    
-    
-    func getPlaces(){
-        let httpcon = HttpCon()
+}
+
+
+// Mark : UITableViewDataSource
+extension PlacesList {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        httpcon.HTTPGet("\(myUrl)/getplaces") {
-            (data: String, error: String?) -> Void in
-            if error != nil {
-                print("error in getting places ")
-            } else {
-                do {
-                    //print(data)
-                    do {
-                        let newdata: NSData = data.dataUsingEncoding(NSUTF8StringEncoding)!
-                        let json = try NSJSONSerialization.JSONObjectWithData(newdata, options: .AllowFragments)
-                        self.places = self.parseJson(json)
-                        
-                    } catch {
-                        print(error)
-                        
-                    }
-                    
-                }
-            }
-        }
-        NSThread.sleepForTimeInterval(0.3)
-        
-    }
-    
-    func parseJson(anyObj:AnyObject) -> Array<Place>{
-        
-        var list:Array<Place> = []
-        
-        if  anyObj is Array<AnyObject> {
-            
-            
-            
-            for json in anyObj as! Array<AnyObject>{
-                let pl:Place = Place()
-                
-                pl.id  =  (json["id"]  as AnyObject? as? Int) ?? 0
-                pl.name = (json["name"] as AnyObject? as? String) ?? "" // to get rid of null
-                pl.adress = (json["adress"] as AnyObject? as? String) ?? ""
-                pl.phone = (json["phone"] as AnyObject? as? String) ?? ""
-                var byteAr = (json["image"] as AnyObject? as? [Int]) ?? []
-                var i = 0
-                
-                
-                var newbyteAr : [UInt8] = []
-                for _ in byteAr {
-                    var q : UInt8 = 0
-                    if byteAr[i] < 0 {
-                        q = UInt8(256 + byteAr[i])
-                    }
-                    else {
-                        q = UInt8(byteAr[i])
-                    }
-                    newbyteAr.append(q)
-                    i += 1
-                }
-                
-                
-                let dataIm = NSData(bytes: newbyteAr, length: newbyteAr.count)
-                let image = UIImage(data: dataIm)
-                pl.image = image
-                
-                
-                list.append(pl)
-            }// for
-            
-        } // if
-        
-        
-        return list
-        
-    }
-    
-    
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if searchController.active && searchController.searchBar.text != "" {
+        // if user searched smth
+        if searchController.isActive && searchController.searchBar.text != "" {
             return filteredPlaces.count
         }
+        
         return places.count
     }
     
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCellWithIdentifier("PlaceCell",forIndexPath: indexPath) as? PlaceCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceCell",for: indexPath) as? PlaceCell {
             
-            if searchController.active && searchController.searchBar.text != "" {
-                cell.placeName.text = filteredPlaces[indexPath.row].name
-                cell.id = filteredPlaces[indexPath.row].id
-                cell.placeAdress.text = filteredPlaces[indexPath.row].adress
-                cell.place = filteredPlaces[indexPath.row]
-                cell.placeImage.image = filteredPlaces[indexPath.row].image
+            
+            let myPlace : Place!
+            if searchController.isActive && searchController.searchBar.text != "" {
+                myPlace = filteredPlaces[(indexPath as NSIndexPath).row]
             }
-            else{
-                cell.placeName.text = places[indexPath.row].name
-                cell.id = places[indexPath.row].id
-                cell.placeAdress.text = places[indexPath.row].adress
-                cell.place = places[indexPath.row]
-                cell.placeImage.image = places[indexPath.row].image
-                
+            else {
+                myPlace = places[(indexPath as NSIndexPath).row]
             }
-            cell.placeName.backgroundColor = UIColor.darkGrayColor().colorWithAlphaComponent(0.3)
-            cell.placeAdress.backgroundColor = UIColor.darkGrayColor().colorWithAlphaComponent(0.3)
+            
+            cell.place = myPlace
+            cell.placeName.text = myPlace.name
+            cell.id = myPlace.id
+            cell.placeAdress.text = myPlace.address
+            cell.imagePath = myPlace.imagePath
+            
+            // if image is already downloaded
+            if let image =  myPlace.image {
+                cell.placeImage.image = image
+            }
+            else {  //  async downloading photo
+                if let path = myPlace.imagePath  {
+                    cell.downloadImage(path)
+                }
+            }
+            
+            if myPlace.distance == -1 {
+                cell.distance.text = ""
+            }
+            else {
+                if let description = myPlace.distance?.description {
+                    cell.distance.text = description + " км"
+                }
+            }
+            
+            cell.placeName.backgroundColor = UIColor.darkGray.withAlphaComponent(0.15)
+            cell.placeAdress.backgroundColor = UIColor.darkGray.withAlphaComponent(0.3)
+            cell.distance.backgroundColor = UIColor.darkGray.withAlphaComponent(0.3)
+            cell.placeName.textColor = UIColor.white.withAlphaComponent(1)
+            
             
             return cell
         }
         
         return UITableViewCell()
     }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let cell = sender as? PlaceCell
-        if let Twobut = segue.destinationViewController as? Buttons {
-            Twobut.place = cell!.place
-            sTone.idPlace = cell!.id
-            sTone.place = cell!.place
-            let backItem = UIBarButtonItem()
-            backItem.title = ""
-            navigationItem.backBarButtonItem = backItem
-        }
-        
-    }
-    
-    
-    
-    
 }
-
-extension PlacesList: UISearchResultsUpdating {
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
-        filterContentForSearchText(searchController.searchBar.text!)
-    }
-}
-
-
-
-
-

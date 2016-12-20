@@ -14,7 +14,29 @@ class PlaceCell: UITableViewCell {
     @IBOutlet weak var placeAdress: UILabel!
     @IBOutlet weak var placeImage: UIImageView!
     
-    var id = 0
+    @IBOutlet weak var distance: UILabel!
+    var id : Int?
     var place : Place!
+    var imagePath : String?
+    var placePhoto : UIImage?
+    
+    
+    // async photo downloading
+    func downloadImage(_ url : String) {
+        NetworkClient.downloadImage(url) { (imageOpt, error) in
+            if error != nil {
+                return
+            }
+            guard let image = imageOpt else {
+                return
+            }
+            self.placePhoto = imageOpt
+            self.place.image = imageOpt
+            //DispatchQueue.main.async {
+                self.placeImage.image = image
+            //}
+        }
+    }
+    
     
 }

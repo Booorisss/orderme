@@ -12,6 +12,6 @@ class CategoryCell: UITableViewCell {
     
     @IBOutlet weak var categoryName: UILabel!
     
-    var id = 0
+    var category: Category!
 
 }

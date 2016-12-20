@@ -27,17 +27,23 @@ class BucketVC : UIViewController, UITableViewDataSource, UITableViewDelegate, o
     var dishes : [Dish] = []
     var kol : [Int] = []
     
+    var myOrder : Order!
+    
     
     override func viewDidLoad() {
         makeBucket()
-        commentText.backgroundColor = UIColor.lightGrayColor().colorWithAlphaComponent(0.3)
-        myTableView.backgroundColor = UIColor.lightGrayColor().colorWithAlphaComponent(0)
+        commentText.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
+        myTableView.backgroundColor = UIColor.lightGray.withAlphaComponent(0)
         myTableView.dataSource = self
         commentText.delegate = self
         myTableView.delegate = self
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.isNavigationBarHidden = true
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return bucket.myBucket.count
     }
     func makeBucket(){
@@ -50,142 +56,201 @@ class BucketVC : UIViewController, UITableViewDataSource, UITableViewDelegate, o
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCellWithIdentifier("bucketCell",forIndexPath: indexPath) as? BucketCell {
-            cell.dishName.text = dishes[indexPath.row].name
-            cell.dishKol.text = kol[indexPath.row].description
-            let newPrice = dishes[indexPath.row].price * kol[indexPath.row]
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "bucketCell",for: indexPath) as? BucketCell {
+            cell.dishName.text = dishes[(indexPath as NSIndexPath).row].name
+            cell.dishKol.text = kol[(indexPath as NSIndexPath).row].description
+            let newPrice = dishes[(indexPath as NSIndexPath).row].price * kol[(indexPath as NSIndexPath).row]
             cell.onePrice.text = newPrice.description
-            cell.dish = dishes[indexPath.row]
+            cell.dish = dishes[(indexPath as NSIndexPath).row]
             
             //  cell.lastMsg.font = UIFont(name: "Arial", size: 15)
             cell.cellDelegate = self
-            cell.backgroundColor = UIColor.lightGrayColor().colorWithAlphaComponent(0)
+            cell.backgroundColor = UIColor.lightGray.withAlphaComponent(0)
             return cell
         }
         
         return UITableViewCell()
     }
     
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        
         view.endEditing(true)
     }
     
-    @IBAction func deleteAll(sender: AnyObject) {
+    
+    @IBAction func deleteAll(_ sender: AnyObject) {
         bucket.myBucket = [:]
         bucket.allSum = 0
         sumLabel.text = "0"
         commentText.text = ""
         myTableView.reloadData()
         
+        
     }
     
     
-    @IBAction func makeAnOrder(sender: AnyObject) {
+    @IBAction func makeAnOrder(_ sender: AnyObject) {
         if sTone.tableID == -1 {
-            let alertController = UIAlertController(title: "Выберите столик", message: "Пожалуйста, считайте QR код и программа определит за каким столом вы сидите", preferredStyle: .Alert)
+            let alertController = UIAlertController(title: "Выберите столик", message: "Пожалуйста, считайте QR код и программа определит за каким столом вы сидите", preferredStyle: .alert)
             
             
-            let okAction = UIAlertAction(title: "Окей", style: .Default) { (action:UIAlertAction!) in
-                self.navigationController!.pushViewController(self.storyboard!.instantiateViewControllerWithIdentifier("getTable") as! GetTableIdVC, animated: true)
+            let okAction = UIAlertAction(title: "Окей", style: .default) { (action:UIAlertAction!) in
+                self.navigationController!.pushViewController(self.storyboard!.instantiateViewController(withIdentifier: "getTable") as! GetTableIdVC, animated: true)
             }
             alertController.addAction(okAction)
             
-            self.presentViewController(alertController, animated: true, completion:nil)
+            self.present(alertController, animated: true, completion:nil)
         }
         else {
             if bucket.myBucket.isEmpty {
-                let alertController = UIAlertController(title: "Пустой заказ", message: "Вы не выбрали ничего из меню, попробуйте еще раз", preferredStyle: .Alert)
+                let alertController = UIAlertController(title: "Пустой заказ", message: "Вы не выбрали ничего из меню, попробуйте еще раз", preferredStyle: .alert)
                 
                 
-                let okAction = UIAlertAction(title: "Окей", style: .Default) { (action:UIAlertAction!) in
+                let okAction = UIAlertAction(title: "Окей", style: .default) { (action:UIAlertAction!) in
                 }
                 alertController.addAction(okAction)
                 
-                self.presentViewController(alertController, animated: true, completion:nil)
+                self.present(alertController, animated: true, completion:nil)
             }
             else {
                 let httpcon = HttpCon()
                 httpcon.okDelegate = self
-                var json = sTone.idPlace.description + "/" + sTone.tableID.description + "{"
-                var flag = false
-                for (dish, kol) in bucket.myBucket {
-                    flag = true
-                    json += dish.id.description + ":" + kol.description + ","
-                }
-                if !flag {
-                    json = "{}"
-                }
-                else {
-                    
-                    json = json.substringToIndex(json.endIndex.predecessor())
-                    json += "}"
-                    
+                let order = Order()
+                order.idPlace = sTone.place.id
+                order.idTable = sTone.tableID
+                order.sum = bucket.allSum
+                order.placeName = SingleTone.shareInstance.place.name
+                
+                for( dish, kol) in bucket.myBucket {
+                    if dish.id != -1{
+                        order.bucket[dish.id.description] = kol;
+                    }
+                    else {
+                        let categid = dish.idCategory * -1
+                        order.bucket[categid.description] = kol;
+                    }
                 }
                 
                 if let comments = commentText.text {
                     if comments != "Дополнительные комментарии к заказу: " {
-                        json += comments
+                        order.comments = comments
                     }
                 }
                 
+                let dateFormatter = DateFormatter()
+                
+                dateFormatter.dateFormat = "yyyy/MM/dd-HH:mm"
+                
+                let Date = Foundation.Date()
+                
+                let nowDate = dateFormatter.string(from: Date)
+                
+                order.nowDate = nowDate
+                
+                let json = JSONSerializer.toJson(order)
                 print(json)
                 
+                myOrder = order
+                
+                
                 httpcon.post("\(myUrl)/makeorder", bodyData: json)
-                deleteAll(sender)
+                
+                
             }
         }
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?){
-        super.touchesBegan(touches, withEvent: event)
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
+        super.touchesBegan(touches, with: event)
         view.endEditing(true)
     }
     
     func okAlert(){
+        deleteAll(0 as AnyObject)
+        let alertController = UIAlertController(title: "Заказ принят!", message: "Ваш заказ успешно отправлен на кухню", preferredStyle: .alert)
         
-        let alertController = UIAlertController(title: "Заказ принят!", message: "Ваш заказ успешно отправлен на кухню", preferredStyle: .Alert)
         
-        
-        let okAction = UIAlertAction(title: "Окей", style: .Default) { (action:UIAlertAction!) in
+        let okAction = UIAlertAction(title: "Окей", style: .default) { (action:UIAlertAction!) in
             
         }
         alertController.addAction(okAction)
         
-        self.presentViewController(alertController, animated: true, completion:nil)
+        self.present(alertController, animated: true, completion:nil)
         
+    
+        let defaults = UserDefaults.standard
+        
+        let decoded  = defaults.object(forKey: "myOrders") as? Data ?? Data()
+        var arrayOrders = NSKeyedUnarchiver.unarchiveObject(with: decoded) as? [Order] ?? [Order]()
+        
+        for intnameDish in myOrder.bucket.keys {
+            
+            for dish in dishes {
+                if dish.id == Int(intnameDish) {
+                     let stringname = dish.name
+                    myOrder.bucket[stringname] = myOrder.bucket[intnameDish]
+                    myOrder.bucket.removeValue(forKey: intnameDish)
+                }
+            }
+           
+            
+        }
+        
+        arrayOrders.append(myOrder)
+        
+        
+        let encodedData = NSKeyedArchiver.archivedData(withRootObject: arrayOrders)
+        
+        defaults.set(encodedData, forKey: "myOrders")
+        defaults.synchronize()
+
+    
+    
+    
     }
     func notOkAlert(){
         
-        let alertController = UIAlertController(title: "Возникли некоторые проблемы!", message: "Проверьте, пожалуйста, интернет и попробуйте снова", preferredStyle: .Alert)
+        let alertController = UIAlertController(title: "Возникли некоторые проблемы!", message: "Проверьте, пожалуйста, интернет и попробуйте снова", preferredStyle: .alert)
         
         
-        let okAction = UIAlertAction(title: "Окей", style: .Default) { (action:UIAlertAction!) in
+        let okAction = UIAlertAction(title: "Окей", style: .default) { (action:UIAlertAction!) in
             
         }
         alertController.addAction(okAction)
         
-        self.presentViewController(alertController, animated: true, completion:nil)
+        self.present(alertController, animated: true, completion:nil)
         
     }
-    func textViewDidBeginEditing(textView: UITextView) {
-        commentText.text = ""
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if let comments = commentText.text {
+            if comments == "Дополнительные комментарии к заказу: " {
+                 commentText.text = ""
+            }
+        }
+     
     }
     
     
-    func addDish(dish: Dish) {
+    func addDish(_ dish: Dish) {
         bucket.allSum += dish.price
         sumLabel.text = bucket.allSum.description
         //myTableView.reloadData()
         
     }
-    func deleteDish(dish: Dish) {
+    func deleteDish(_ dish: Dish) {
         bucket.allSum -= dish.price
         sumLabel.text = bucket.allSum.description
         //myTableView.reloadData()
     }
     
-    @IBAction func backButton(sender: AnyObject) {
-        self.navigationController?.popViewControllerAnimated(true)
+    @IBAction func backButton(_ sender: AnyObject) {
+        self.navigationController?.popViewController(animated: true)
     }
+    
+    @IBAction func gest(_ sender: AnyObject) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
 }

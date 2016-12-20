@@ -22,10 +22,24 @@ class BucketCell: UITableViewCell {
     
     var cellDelegate : MyCellProtocol?
     
+    let sTone = SingleTone.shareInstance
     
     
-    @IBAction func addDishBut(sender: AnyObject) {
-    
+    @IBAction func addDishBut(_ sender: AnyObject) {
+        if dish.oneprice {
+            if sTone.categoriesOnePrice.keys.contains(dish.idCategory){
+                sTone.categoriesOnePrice[dish.idCategory] = sTone.categoriesOnePrice[dish.idCategory]! + 1
+            }
+            else {
+                sTone.categoriesOnePrice[dish.idCategory] = 1
+                let dish1 = Dish(id: -1, idPlace: -1, idCategory: dish.idCategory, name: "", price: dish.catprice, description: "", oneprice: true)
+                self.cellDelegate?.addDish(dish1)
+            }
+        }
+
+        
+        
+        
         let kol = Int(dishKol.text!)! + 1
         dishKol.text = kol.description
         
@@ -55,8 +69,21 @@ class BucketCell: UITableViewCell {
         self.cellDelegate?.addDish(self.dish)
     }
     
-    @IBAction func delDishBut(sender: AnyObject) {
-   
+    @IBAction func delDishBut(_ sender: AnyObject) {
+        if dish.oneprice {
+            if sTone.categoriesOnePrice.keys.contains(dish.idCategory){
+                sTone.categoriesOnePrice[dish.idCategory] = sTone.categoriesOnePrice[dish.idCategory]! - 1
+                if  sTone.categoriesOnePrice[dish.idCategory] == 0 {
+                    sTone.categoriesOnePrice.removeValue(forKey: dish.idCategory)
+                    let dish1 = Dish(id: -1, idPlace: -1, idCategory: dish.idCategory, name: "", price: dish.catprice, description: "", oneprice: true)
+                    self.cellDelegate?.deleteDish(dish1)
+                }
+            }
+            
+        }
+        
+        
+        
         if Int(dishKol.text!)! > 0 {
             let kol = Int(dishKol.text!)! - 1
             dishKol.text = kol.description
@@ -72,7 +99,7 @@ class BucketCell: UITableViewCell {
                 if d.id == self.dish.id {
                     bucket.myBucket[d]! -= 1
                     if bucket.myBucket[d]! == 0 {
-                        bucket.myBucket.removeValueForKey(d)
+                        bucket.myBucket.removeValue(forKey: d)
                     }
                     break
                 }
