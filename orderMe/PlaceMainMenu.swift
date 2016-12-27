@@ -18,8 +18,14 @@ class PlaceMainMenu: UIViewController {
     
     @IBOutlet weak var placeImage: UIImageView!
     
+    // names of buttons in rows in static table
     var actions : [String] = []
+    
+    // photos in rows in static table
     var photosOfAction : [String] = []
+    
+    // menu, that will be downloaded async later
+    var menu : Menu? = nil
     
     
     @IBOutlet weak var labelName: UILabel!
@@ -153,17 +159,17 @@ class PlaceMainMenu: UIViewController {
     }
     
     
-
+    
     
     
     
     
     @IBAction func backButton(_ sender: AnyObject) {
-       _ =  navigationController?.popViewController(animated: true)
+        _ =  navigationController?.popViewController(animated: true)
     }
     
     @IBAction func gest(_ sender: AnyObject) {
-      _ =  self.navigationController?.popViewController(animated: true)
+        _ =  self.navigationController?.popViewController(animated: true)
     }
     
     func openMapForPlace() {
@@ -174,7 +180,7 @@ class PlaceMainMenu: UIViewController {
         }
         
         guard let latitute: CLLocationDegrees =  Double(lat1),
-              let longitute: CLLocationDegrees =  Double(lng1) else {
+            let longitute: CLLocationDegrees =  Double(lng1) else {
                 return
         }
         
@@ -199,9 +205,11 @@ class PlaceMainMenu: UIViewController {
             if error != nil {
                 self.showAlert(title: "Ooops", message: "Check the connection, please")
             }
+            
+            self.menu = menu
+              // TODO make delegate to pass the menu even if user is already on the next ViewController
+            
         }
-
-        
     }
     
     
@@ -244,6 +252,15 @@ extension PlaceMainMenu : UITableViewDataSource {
 
 // Mark : UITableViewDelegate
 
+
+/*
+ 1) Detect table
+ 2) Menu
+ 3) Reservation
+ 4) Call a waiter
+ 5) Phone number
+ 6) Adress
+ */
 extension PlaceMainMenu : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let backItem = UIBarButtonItem()
@@ -256,7 +273,8 @@ extension PlaceMainMenu : UITableViewDelegate {
         
         switch pressedButton {
             
-        case 0 :
+        case 0 :  // Detecting table ID -  if app runs on simulator go to SimulatorTableId,
+                  // else go to GetTableIdVc (QRcode scanner )
             
             if Platform.isSimulator {
                 self.navigationController!.pushViewController(self.storyboard!.instantiateViewController(withIdentifier: "simulatorTable") as! SimulatorTableId, animated: true)
@@ -267,11 +285,13 @@ extension PlaceMainMenu : UITableViewDelegate {
             }
             
             
-        case 1 :
-            self.navigationController!.pushViewController(self.storyboard!.instantiateViewController(withIdentifier: "CatVC") as! CategoriesVC, animated: true)
+        case 1 : // open CategoriesVC for chosing menu
+            if let CategoriesVC = self.storyboard!.instantiateViewController(withIdentifier: "CatVC") as? CategoriesVC {
+            CategoriesVC.menu = self.menu
+            self.navigationController!.pushViewController(CategoriesVC, animated: true)
+            }
             
-            
-        case 2 :
+        case 2 : // open ReserveVC for reserving table
             self.navigationController!.pushViewController(self.storyboard!.instantiateViewController(withIdentifier: "reserveVC") as! ReserveVC, animated: true)
             
             
@@ -292,7 +312,7 @@ extension PlaceMainMenu : UITableViewDelegate {
         case 4 :
             let phoneNumber = actions[4]
             let alertController = UIAlertController(title: "Call \(place.name)", message: "Call \(phoneNumber)?", preferredStyle: .alert)
-    
+            
             let okAction = UIAlertAction(title: "Yes", style: .default) { (action:UIAlertAction!) in
                 
                 if let phoneCallURL:URL = URL(string: "tel://\(phoneNumber)") {
@@ -317,7 +337,7 @@ extension PlaceMainMenu : UITableViewDelegate {
         }
         
     }
-
+    
 }
 
 

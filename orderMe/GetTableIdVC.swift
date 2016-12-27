@@ -124,7 +124,7 @@ class GetTableIdVC: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                             if idValid == sTone.placeIdValidation {
                                 if let idTable = Int((check?[2])!) {
                                     sTone.tableID = idTable
-                                    self.navigationController?.popViewController(animated: true)
+                                   _ = self.navigationController?.popViewController(animated: true)
                                 }
                             }
                         }
@@ -145,7 +145,7 @@ class GetTableIdVC: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                                     self.noPlace = false
                                     sTone.qrcodeWasDetected = true
                                 
-                               self.navigationController?.popViewController(animated: true)
+                             _ =  self.navigationController?.popViewController(animated: true)
                                 
                                 }
                             }
@@ -161,7 +161,7 @@ class GetTableIdVC: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     
     @IBAction func gest(_ sender: AnyObject) {
-        self.navigationController?.popViewController(animated: true)
+      _ =  self.navigationController?.popViewController(animated: true)
     }
     
     

@@ -18,7 +18,7 @@ class MakeOrderVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     @IBOutlet weak var nameLabel: UILabel!
     
-    let menu = Menu.shareInstance
+    var menu : [Dish]?
     
     var categoryName = ""
     

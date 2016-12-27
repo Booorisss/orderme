@@ -114,10 +114,9 @@ class NetworkClient {
     }
     
     
-    // getting a Menu - [ Category ; [Dish] ]
+    // getting a Menu - [ Category : [Dish] ]
     static func getMenu(placeId: Int, completion: @escaping (_ menu: Menu?, _ error : NSError?) -> () ) {
-        
-        
+    
         func response_completion( _ response_result: String? , response_error: NSError? ) -> Void {
             if response_error != nil {
                 completion(nil, response_error)
@@ -127,7 +126,9 @@ class NetworkClient {
             guard let menuJson = response_result else {
                 return
             }
-            let menu : [Menu]? = Mapper<Menu>().mapDictionary(JSON: <#T##[String : [String : Any]]#>, toDictionary: <#T##[String : Menu]#>)
+            let menu : Menu? = Mapper<Menu>().map(JSONString: menuJson)
+            
+            completion(menu, nil)
             
             
         }
