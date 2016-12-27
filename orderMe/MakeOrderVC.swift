@@ -8,30 +8,25 @@
 
 import UIKit
 
-class MakeOrderVC: UIViewController, UITableViewDelegate, UITableViewDataSource, MyCellProtocol, infoDish {
+class MakeOrderVC: UIViewController, MyCellProtocol, infoDish {
     
     @IBOutlet weak var orderTableView: UITableView!
 
-    @IBOutlet weak var sumLabel: UILabel!
+    @IBOutlet weak var sumLabel: UILabel! // sum of bucket
     
-    @IBOutlet weak var myImage: UIImageView!
+    @IBOutlet weak var myImage: UIImageView!  // image of Place
     
     @IBOutlet weak var nameLabel: UILabel!
     
-    var menu : [Dish]?
-    
-    var categoryName = ""
-    
+    var menu : [Dish]?  // array of dishes, that chosen category contains
+
     let bucket = Bucket.shareInstance
-    let sTone = SingleTone.shareInstance
+    var category : Category?
     
-    var category : Category? = nil
     
     override func viewDidLoad() {
-        self.title = categoryName
-
-        if let p = sTone.place {
-            myImage.image = p.image
+        if let place = SingleTone.shareInstance.place {
+            myImage.image = place.image
         }
         
         self.orderTableView.dataSource = self
@@ -40,32 +35,10 @@ class MakeOrderVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     }
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.isNavigationBarHidden = true
-         nameLabel.text = sTone.place.name
+         nameLabel.text = SingleTone.shareInstance.place.name
         sumLabel.text = bucket.allSum.description
         nameLabel.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         orderTableView.reloadData()
-    }
-    
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return menu.menu[category!]!.count
-    }
-    
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "dishCell",for: indexPath) as? DishCell {
-            cell.dishName.text = menu.menu[category!]![(indexPath as NSIndexPath).row].name
-            cell.dish = menu.menu[category!]![(indexPath as NSIndexPath).row]
-            cell.priceLabel.text = String(menu.menu[category!]![(indexPath as NSIndexPath).row].price)
-            getNumberofItems(cell)
-            cell.numberOfItemsLabel.text = cell.numberOfItems.description
-            cell.cellDelegate = self
-            cell.infoD = self
-            
-            return cell
-        }
-        
-        return UITableViewCell()
     }
     
     func getNumberofItems(_ myCell: UITableViewCell){
@@ -79,20 +52,21 @@ class MakeOrderVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
             }
         }
     }
+    
     func addDish(_ dish: Dish) {
-        bucket.allSum += dish.price
+       // bucket.allSum += dish.price!  // TODO delete "!"
         sumLabel.text = bucket.allSum.description
     }
     func deleteDish(_ dish: Dish) {
-        bucket.allSum -= dish.price
+      //  bucket.allSum -= dish.price!   // TODO delete "!"
         sumLabel.text = bucket.allSum.description
     }
     
     
     
     func showInfoDish(_ d: Dish) {
-        let alertController = UIAlertController(title: "Информация о блюде", message: d.dishDescription, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "окей", style: .default) { (action:UIAlertAction!) in
+        let alertController = UIAlertController(title: "Information", message: d.dishDescription, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default) { (action:UIAlertAction!) in
             
         }
         alertController.addAction(okAction)
@@ -110,11 +84,40 @@ class MakeOrderVC: UIViewController, UITableViewDelegate, UITableViewDataSource,
     
     
     @IBAction func backButton(_ sender: AnyObject) {
-        self.navigationController?.popViewController(animated: true)
+       _ = self.navigationController?.popViewController(animated: true)
     }
     
     @IBAction func gest(_ sender: AnyObject) {
-        self.navigationController?.popViewController(animated: true)
+       _ = self.navigationController?.popViewController(animated: true)
     }
     
+}
+
+
+// Mark : UITableViewDelegate, UITableViewDataSource
+
+extension MakeOrderVC : UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let menu = menu else { return 0 }
+        return menu.count
+    }
+    
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let menu = menu,
+              let cell = tableView.dequeueReusableCell(withIdentifier: "dishCell",for: indexPath) as? DishCell else { return UITableViewCell() }
+
+            cell.dishName.text = menu[(indexPath as NSIndexPath).row].name
+            cell.dish = menu[(indexPath as NSIndexPath).row]
+            cell.priceLabel.text = menu[(indexPath as NSIndexPath).row].price?.description
+            getNumberofItems(cell)  // TODO count in more elegant way
+            cell.numberOfItemsLabel.text = cell.numberOfItems.description
+            cell.cellDelegate = self
+            cell.infoD = self
+            
+            return cell
+    
+    }
+
 }

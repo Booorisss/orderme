@@ -50,7 +50,7 @@ class CategoriesVC: UIViewController {
         guard let Order = segue.destination as? MakeOrderVC else  { return }
         
             if let categoryNameText = cell.categoryName.text {
-                Order.categoryName = categoryNameText  // name of chosen category
+                Order.title = categoryNameText  // name of chosen category
                 Order.category = cell.category    // category
                 let chosenMenu = menu?.menu?[cell.category]
                 Order.menu = chosenMenu
@@ -75,7 +75,7 @@ class CategoriesVC: UIViewController {
 
 
 // Mark : UITableViewDataSource, UITableViewDelegate
-extension CategoriesVC : UITableViewDataSource, UITableViewDelegate {
+extension CategoriesVC : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categoriesArray.count
     }

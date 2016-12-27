@@ -43,3 +43,21 @@ class Dish : Mappable {
     }
     
 }
+
+// Mark : Equatable
+
+extension Dish : Equatable {
+    static func == (lhs: Dish, rhs: Dish) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+
+
+// Mark : Hashable
+
+extension Dish : Hashable {
+    var hashValue : Int {
+        return self.id ?? -1
+    }
+}
+

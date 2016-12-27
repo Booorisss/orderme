@@ -23,7 +23,7 @@ class PlaceCell: UITableViewCell {
     
     // async photo downloading
     func downloadImage(_ url : String) {
-        NetworkClient.downloadImage(url) { (imageOpt, error) in
+        NetworkClient.downloadImage(url: url) { (imageOpt, error) in
             if error != nil {
                 return
             }
@@ -32,9 +32,9 @@ class PlaceCell: UITableViewCell {
             }
             self.placePhoto = imageOpt
             self.place.image = imageOpt
-            //DispatchQueue.main.async {
+            DispatchQueue.main.async {
                 self.placeImage.image = image
-            //}
+            }
         }
     }
     

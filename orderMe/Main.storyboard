@@ -138,10 +138,10 @@
                                 <inset key="separatorInset" minX="65" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="actionCell" rowHeight="55" id="Jru-qZ-AT3" customClass="ActionCell" customModule="OrderME" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="1000" height="55"/>
+                                        <rect key="frame" x="0.0" y="28" width="375" height="55"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Jru-qZ-AT3" id="Q3z-Aq-s0I">
-                                            <frame key="frameInset" width="1000" height="54.5"/>
+                                            <frame key="frameInset" width="375" height="54.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6as-PH-0Hb">
@@ -859,9 +859,9 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.78880208330000001" green="0.78880208330000001" blue="0.78880208330000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
-                                            <outlet property="dishKol" destination="chh-cQ-Kqn" id="JSX-Av-S9A"/>
+                                            <outlet property="amountLabel" destination="chh-cQ-Kqn" id="xMc-lZ-Sgz"/>
                                             <outlet property="dishName" destination="SdZ-iR-4Hx" id="RmW-JE-Kgd"/>
-                                            <outlet property="onePrice" destination="fa8-5A-f2b" id="NoB-nT-IkH"/>
+                                            <outlet property="priceLabel" destination="fa8-5A-f2b" id="a1H-jy-Lv3"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -988,10 +988,10 @@
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FutureCell" rowHeight="70" id="hO4-bp-De6" customClass="FutureReserve" customModule="OrderME" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="1000" height="70"/>
+                                        <rect key="frame" x="0.0" y="28" width="375" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hO4-bp-De6" id="7cq-O3-YJx">
-                                            <frame key="frameInset" width="1000" height="69.5"/>
+                                            <frame key="frameInset" width="375" height="69.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="g5q-7r-VQL">
@@ -1036,10 +1036,10 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PastCell" rowHeight="70" id="wzx-9U-1Fx" customClass="PastReserve" customModule="OrderME" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="98" width="1000" height="70"/>
+                                        <rect key="frame" x="0.0" y="98" width="375" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wzx-9U-1Fx" id="vBa-2m-RiY">
-                                            <frame key="frameInset" width="1000" height="69.5"/>
+                                            <frame key="frameInset" width="375" height="69.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="sDu-oF-F1c">

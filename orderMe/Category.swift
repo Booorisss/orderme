@@ -8,8 +8,6 @@
 import ObjectMapper
 
 class Category : Mappable {
-    
-    
     var id : Int?
     var place : Place?
     var name : String?
@@ -30,17 +28,20 @@ class Category : Mappable {
         id             <- map["id"]
         place          <- map["place"]
         name           <- map["name"]
-        
-        
     }
     
 }
+
+// Mark : Equatable
 
 extension Category : Equatable {
     static func == (lhs: Category, rhs: Category) -> Bool {
         return lhs.id == rhs.id
     }
 }
+
+
+// Mark : Hashable
 
 extension Category : Hashable {
     var hashValue : Int {

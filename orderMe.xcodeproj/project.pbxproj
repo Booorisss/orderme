@@ -21,7 +21,6 @@
 		2B2EA79B1CBB03D6001507DD /* PlaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2EA78C1CBB03D6001507DD /* PlaceCell.swift */; };
 		2B2EA79D1CBB03D6001507DD /* SingleTone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2EA78E1CBB03D6001507DD /* SingleTone.swift */; };
 		2B2EA79E1CBB03D6001507DD /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2EA78F1CBB03D6001507DD /* Place.swift */; };
-		2B2EA79F1CBB03D6001507DD /* JSONSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2EA7901CBB03D6001507DD /* JSONSerializer.swift */; };
 		2B2EA7A21CBB03F7001507DD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B2EA7A01CBB03F7001507DD /* Main.storyboard */; };
 		2B2EA7A31CBB03F7001507DD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B2EA7A11CBB03F7001507DD /* LaunchScreen.storyboard */; };
 		2B2EA7AC1CBB0403001507DD /* ReserveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2EA7A41CBB0403001507DD /* ReserveVC.swift */; };
@@ -37,13 +36,11 @@
 		2B982BA21D02335400151D88 /* MyOrdersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B982BA11D02335400151D88 /* MyOrdersController.swift */; };
 		2B982BA41D0240AB00151D88 /* myOrderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B982BA31D0240AB00151D88 /* myOrderCell.swift */; };
 		2BD9637E1CEDDE2B007913B0 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD9637D1CEDDE2B007913B0 /* Order.swift */; };
-		2BE837291CFC6D9500506130 /* DataMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE837281CFC6D9500506130 /* DataMenu.swift */; };
 		2BE8372B1CFF818800506130 /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE8372A1CFF818800506130 /* MyTabBarController.swift */; };
 		2BE8372D1CFF91D400506130 /* ReservesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE8372C1CFF91D400506130 /* ReservesController.swift */; };
 		2BE8372F1CFF9EE800506130 /* FutureReserveCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE8372E1CFF9EE800506130 /* FutureReserveCell.swift */; };
 		2BE837311CFF9EF300506130 /* PastReserveCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE837301CFF9EF300506130 /* PastReserveCell.swift */; };
 		2BE837331CFFA10000506130 /* Reserve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE837321CFFA10000506130 /* Reserve.swift */; };
-		2BE837351D00C04F00506130 /* DateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE837341D00C04F00506130 /* DateExtension.swift */; };
 		2BEF26CA1D08C3DF00026760 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BEF26C91D08C3DF00026760 /* CoreLocation.framework */; };
 		2BF4D4201CC6DCEF0086ED1E /* UIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF4D41F1CC6DCEF0086ED1E /* UIExtensions.swift */; };
 		E8E4BF6160F8C100D1B12500 /* Pods_orderMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BAD16F67A289A8CEBEDC646 /* Pods_orderMe.framework */; };
@@ -68,7 +65,6 @@
 		2B2EA78C1CBB03D6001507DD /* PlaceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceCell.swift; sourceTree = "<group>"; };
 		2B2EA78E1CBB03D6001507DD /* SingleTone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleTone.swift; sourceTree = "<group>"; };
 		2B2EA78F1CBB03D6001507DD /* Place.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
-		2B2EA7901CBB03D6001507DD /* JSONSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONSerializer.swift; sourceTree = "<group>"; };
 		2B2EA7A01CBB03F7001507DD /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		2B2EA7A11CBB03F7001507DD /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2B2EA7A41CBB0403001507DD /* ReserveVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReserveVC.swift; sourceTree = "<group>"; };
@@ -84,13 +80,11 @@
 		2B982BA11D02335400151D88 /* MyOrdersController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyOrdersController.swift; sourceTree = "<group>"; };
 		2B982BA31D0240AB00151D88 /* myOrderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = myOrderCell.swift; sourceTree = "<group>"; };
 		2BD9637D1CEDDE2B007913B0 /* Order.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
-		2BE837281CFC6D9500506130 /* DataMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataMenu.swift; sourceTree = "<group>"; };
 		2BE8372A1CFF818800506130 /* MyTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
 		2BE8372C1CFF91D400506130 /* ReservesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReservesController.swift; sourceTree = "<group>"; };
 		2BE8372E1CFF9EE800506130 /* FutureReserveCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FutureReserveCell.swift; sourceTree = "<group>"; };
 		2BE837301CFF9EF300506130 /* PastReserveCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PastReserveCell.swift; sourceTree = "<group>"; };
 		2BE837321CFFA10000506130 /* Reserve.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reserve.swift; sourceTree = "<group>"; };
-		2BE837341D00C04F00506130 /* DateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateExtension.swift; sourceTree = "<group>"; };
 		2BEF26C91D08C3DF00026760 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		2BF4D41F1CC6DCEF0086ED1E /* UIExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIExtensions.swift; sourceTree = "<group>"; };
 		A02526015C2AC40E8E286088 /* Pods-orderMe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-orderMe.debug.xcconfig"; path = "Pods/Target Support Files/Pods-orderMe/Pods-orderMe.debug.xcconfig"; sourceTree = "<group>"; };
@@ -150,8 +144,8 @@
 				2B2EA7831CBB03D6001507DD /* PlaceMainMenu.swift */,
 				2B2EA7AB1CBB0403001507DD /* CategoriesVC.swift */,
 				2B2EA7AA1CBB0403001507DD /* MakeOrderVC.swift */,
-				2B2EA7A41CBB0403001507DD /* ReserveVC.swift */,
 				2B2EA7A81CBB0403001507DD /* BucketVC.swift */,
+				2B2EA7A41CBB0403001507DD /* ReserveVC.swift */,
 				2BE8372C1CFF91D400506130 /* ReservesController.swift */,
 				2B982BA11D02335400151D88 /* MyOrdersController.swift */,
 			);
@@ -170,16 +164,15 @@
 		2B2EA7801CBB03C0001507DD /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				2BD06E931E13082700819268 /* New Group */,
 				2B2EA7851CBB03D6001507DD /* AppDelegate.swift */,
 				2B3A98941E061D8900AF01DC /* Cells */,
 				2B3A98931E061D7900AF01DC /* Objects */,
 				2B3A98921E061D6800AF01DC /* Networking */,
 				2B2EA78E1CBB03D6001507DD /* SingleTone.swift */,
+				2B2EA7891CBB03D6001507DD /* Bucket.swift */,
 				2B2EA7881CBB03D6001507DD /* Protocols.swift */,
 				2BF4D41F1CC6DCEF0086ED1E /* UIExtensions.swift */,
-				2B2EA7901CBB03D6001507DD /* JSONSerializer.swift */,
-				2BE837281CFC6D9500506130 /* DataMenu.swift */,
-				2BE837341D00C04F00506130 /* DateExtension.swift */,
 				2B3A98951E0631DC00AF01DC /* CallWaiterReason.swift */,
 			);
 			name = Model;
@@ -201,7 +194,6 @@
 				2B2EA78B1CBB03D6001507DD /* Dish.swift */,
 				2B13B0271E064472004A09D2 /* Menu.swift */,
 				2BE837321CFFA10000506130 /* Reserve.swift */,
-				2B2EA7891CBB03D6001507DD /* Bucket.swift */,
 				2BD9637D1CEDDE2B007913B0 /* Order.swift */,
 			);
 			name = Objects;
@@ -210,6 +202,7 @@
 		2B3A98941E061D8900AF01DC /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				2B2EA78C1CBB03D6001507DD /* PlaceCell.swift */,
 				2B2EA7821CBB03D6001507DD /* CategoryCell.swift */,
 				2B2EA7841CBB03D6001507DD /* DishCell.swift */,
 				2B2EA7861CBB03D6001507DD /* ActionCell.swift */,
@@ -217,9 +210,15 @@
 				2BE837301CFF9EF300506130 /* PastReserveCell.swift */,
 				2B982BA31D0240AB00151D88 /* myOrderCell.swift */,
 				2B2EA7871CBB03D6001507DD /* BucketCell.swift */,
-				2B2EA78C1CBB03D6001507DD /* PlaceCell.swift */,
 			);
 			name = Cells;
+			sourceTree = "<group>";
+		};
+		2BD06E931E13082700819268 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "New Group";
 			sourceTree = "<group>";
 		};
 		C9DF39D983637B40F1924EE8 /* Pods */ = {
@@ -367,13 +366,11 @@
 				2B2EA7941CBB03D6001507DD /* AppDelegate.swift in Sources */,
 				2BE8372F1CFF9EE800506130 /* FutureReserveCell.swift in Sources */,
 				2B2EA79A1CBB03D6001507DD /* Dish.swift in Sources */,
-				2BE837351D00C04F00506130 /* DateExtension.swift in Sources */,
 				2B2EA7961CBB03D6001507DD /* BucketCell.swift in Sources */,
 				2B2EA7B11CBB0403001507DD /* PlacesListVC.swift in Sources */,
 				2BE8372B1CFF818800506130 /* MyTabBarController.swift in Sources */,
 				2BE837311CFF9EF300506130 /* PastReserveCell.swift in Sources */,
 				2B13B0281E064472004A09D2 /* Menu.swift in Sources */,
-				2BE837291CFC6D9500506130 /* DataMenu.swift in Sources */,
 				2B2EA7971CBB03D6001507DD /* Protocols.swift in Sources */,
 				2B2EA7951CBB03D6001507DD /* ActionCell.swift in Sources */,
 				2B982BA21D02335400151D88 /* MyOrdersController.swift in Sources */,
@@ -387,7 +384,6 @@
 				2B2EA79B1CBB03D6001507DD /* PlaceCell.swift in Sources */,
 				2B2EA7991CBB03D6001507DD /* Category.swift in Sources */,
 				2B2EA7AD1CBB0403001507DD /* GetTableIdVC.swift in Sources */,
-				2B2EA79F1CBB03D6001507DD /* JSONSerializer.swift in Sources */,
 				2B2EA7981CBB03D6001507DD /* Bucket.swift in Sources */,
 				2B3A98911E061B2100AF01DC /* NetworkClient.swift in Sources */,
 				2B2EA7911CBB03D6001507DD /* CategoryCell.swift in Sources */,

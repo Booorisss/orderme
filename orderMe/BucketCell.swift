@@ -10,103 +10,52 @@ import UIKit
 
 class BucketCell: UITableViewCell {
     
-    @IBOutlet weak var dishName: UILabel!
-    @IBOutlet weak var dishKol: UILabel!
-    @IBOutlet weak var onePrice: UILabel!
+    @IBOutlet weak var dishName: UILabel!  // name of the dish
+    @IBOutlet weak var amountLabel: UILabel!   // amount of this dish (label)
+    @IBOutlet weak var priceLabel: UILabel!  // price of this dish * amount of dish
     
     var dish : Dish!
     
-    var numberOfItems = 0
-    
-    let bucket = Bucket.shareInstance
+    var numberOfItems = 0   // amount of dish (number)
     
     var cellDelegate : MyCellProtocol?
     
-    let sTone = SingleTone.shareInstance
-    
     
     @IBAction func addDishBut(_ sender: AnyObject) {
-        if dish.oneprice {
-            if sTone.categoriesOnePrice.keys.contains(dish.idCategory){
-                sTone.categoriesOnePrice[dish.idCategory] = sTone.categoriesOnePrice[dish.idCategory]! + 1
-            }
-            else {
-                sTone.categoriesOnePrice[dish.idCategory] = 1
-                let dish1 = Dish(id: -1, idPlace: -1, idCategory: dish.idCategory, name: "", price: dish.catprice, description: "", oneprice: true)
-                self.cellDelegate?.addDish(dish1)
-            }
-        }
-
         
+        guard let dish = dish else { return }
+        guard let amount = Int(amountLabel.text!) else { return }
         
+        let newAmount = amount + 1
+        amountLabel.text = newAmount.description
         
-        let kol = Int(dishKol.text!)! + 1
-        dishKol.text = kol.description
+        guard let oldPrice = Int(priceLabel.text!) else { return }
         
-        let price = Int(onePrice.text!)!
-        var newprice = price
-        if kol != 1 {
-            newprice = price * kol / (kol - 1)
-        }
-        else {
-            newprice = dish.price
-        }
+        let newPrice = newAmount != 1 ? oldPrice * newAmount / (newAmount - 1) : dish.price
         
-        onePrice.text = newprice.description
+        priceLabel.text = newPrice?.description
         
-        
-        var flag = false
-        for (d,_) in bucket.myBucket {
-            if d.id == self.dish.id {
-                flag = true
-                bucket.myBucket[d]! += 1
-                break
-            }
-        }
-        if !flag {
-            bucket.myBucket[self.dish] = 1
-        }
-        self.cellDelegate?.addDish(self.dish)
+        Bucket.shareInstance.addDish(dish: dish) // updating Bucket
+        cellDelegate?.addDish(dish)  // updating sum label in Categories
     }
     
     @IBAction func delDishBut(_ sender: AnyObject) {
-        if dish.oneprice {
-            if sTone.categoriesOnePrice.keys.contains(dish.idCategory){
-                sTone.categoriesOnePrice[dish.idCategory] = sTone.categoriesOnePrice[dish.idCategory]! - 1
-                if  sTone.categoriesOnePrice[dish.idCategory] == 0 {
-                    sTone.categoriesOnePrice.removeValue(forKey: dish.idCategory)
-                    let dish1 = Dish(id: -1, idPlace: -1, idCategory: dish.idCategory, name: "", price: dish.catprice, description: "", oneprice: true)
-                    self.cellDelegate?.deleteDish(dish1)
-                }
-            }
-            
-        }
         
+        guard let dish = dish else { return }
+        guard let amount = Int(amountLabel.text!) else { return }
+        guard amount > 0 else { return }
         
+        let newAmount = amount - 1
+        amountLabel.text = newAmount.description
         
-        if Int(dishKol.text!)! > 0 {
-            let kol = Int(dishKol.text!)! - 1
-            dishKol.text = kol.description
-            
-            let price = Int(onePrice.text!)!
-            let newprice = price * kol  / (kol + 1)
-            onePrice.text = newprice.description
-            
-            
-            
-            
-            for (d,_) in bucket.myBucket {
-                if d.id == self.dish.id {
-                    bucket.myBucket[d]! -= 1
-                    if bucket.myBucket[d]! == 0 {
-                        bucket.myBucket.removeValue(forKey: d)
-                    }
-                    break
-                }
-            }
-            cellDelegate?.deleteDish(self.dish)
-        }
+        guard let oldPrice = Int(priceLabel.text!) else { return }
         
+        let newPrice = oldPrice * newAmount / (newAmount + 1)
+        
+        priceLabel.text = newPrice.description
+        
+        Bucket.shareInstance.deleteDish(dish: dish) // updating Bucket
+        cellDelegate?.deleteDish(dish) // updating sum label in Categories
         
     }
     
