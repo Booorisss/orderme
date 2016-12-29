@@ -6,57 +6,54 @@
 //  Copyright © 2016 Boris Gurtovoy. All rights reserved.
 //
 
-import UIKit
+import ObjectMapper
 
-class Reserve : NSObject{
-    var placeId = -1
-    var placeName = ""
-    var date = ""
-    var nowDate = ""
-    var phoneNumber = ""
-    var numberOfPeople = ""
-    var book = true
+class Reserve : Mappable{
+    var id : Int?
+    var place : Place?
+    var date : Date?
+    var nowDate : Date?
+    var phoneNumber : String?
+    var numberOfPeople : Int?
     
-    init(placeId: Int, placeName :String, date: String, nowDate: String, phoneNumber: String, numberOfPeople: String, book: Bool){
-        self.placeId = placeId
-        self.placeName = placeName
+    required init?(map: Map) {
+        
+    }
+    
+    init(id : Int, place: Place, date: Date, nowDate: Date, phoneNumber: String, numberOfPeople: Int){
+        self.id = id
+        self.place = place
         self.date = date
         self.nowDate = nowDate
         self.phoneNumber = phoneNumber
         self.numberOfPeople = numberOfPeople
-        self.book = book
     }
     
-    required convenience init(coder aDecoder: NSCoder) {
-        let placeId = aDecoder.decodeInteger(forKey: "placeId")
-        let placeName = aDecoder.decodeObject(forKey: "placeName") as! String
-        let date = aDecoder.decodeObject(forKey: "date") as! String
-        let nowDate = aDecoder.decodeObject(forKey: "nowDate") as! String
-        let phoneNumber = aDecoder.decodeObject(forKey: "phoneNumber") as! String
-        let numberOfPeople = aDecoder.decodeObject(forKey: "numberOfPeople") as! String
-        let book = aDecoder.decodeObject(forKey: "book") as! Bool
-        
-        self.init(placeId: placeId, placeName:placeName, date: date,nowDate: nowDate, phoneNumber: phoneNumber, numberOfPeople: numberOfPeople, book: book)
+    // Mark : Mappable
+    func mapping(map: Map) {
+        id              <- map["id"]
+        place           <- map["place"]
+        date            <- map["date"]
+        nowDate         <- map["nowDate"]
+        phoneNumber     <- map["phoneNumber"]
+        numberOfPeople  <- map["numberOfPeople"]
     }
     
-    func encodeWithCoder(_ aCoder: NSCoder) {
-        aCoder.encode(placeId, forKey: "placeId")
-        aCoder.encode(placeName, forKey: "placeName")
-        aCoder.encode(date, forKey: "date")
-        aCoder.encode(nowDate, forKey: "nowDate")
-        aCoder.encode(phoneNumber, forKey: "phoneNumber")
-        aCoder.encode(numberOfPeople, forKey: "numberOfPeople")
-        aCoder.encode(book, forKey: "book")
+}
+
+// Mark : Equatable
+
+extension Reserve : Equatable {
+    static func == (lhs: Reserve, rhs: Reserve) -> Bool {
+        return lhs.id == rhs.id
     }
-    
-      override func isEqual(_ object: Any?) -> Bool {
-         if let object = object as? Reserve {
-            return placeId == object.placeId && placeName == object.placeName && date == object.date && nowDate == object.nowDate && phoneNumber == object.phoneNumber && numberOfPeople == object.numberOfPeople
-        }
-         else {
-            return false
-        }
-        
+}
+
+
+// Mark : Hashable
+
+extension Reserve : Hashable {
+    var hashValue : Int {
+        return self.id ?? -1
     }
-    
 }

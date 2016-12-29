@@ -35,7 +35,7 @@ class CategoriesVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         
         navigationController?.isNavigationBarHidden = true
-        nameLabel.text = SingleTone.shareInstance.place.name
+        nameLabel.text = SingleTone.shareInstance.place?.name
         nameLabel.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         sumLabel.text = bucket.allSum.description
         guard let menu = self.menu else { return }

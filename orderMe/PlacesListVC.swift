@@ -68,7 +68,7 @@ class PlacesList: UITableViewController, CLLocationManagerDelegate {
             Bucket.shareInstance.myBucket = [:]
             Bucket.shareInstance.allSum = 0
             SingleTone.shareInstance.tableID = -1
-            Menu.shareInstance.deleteMenu()
+            //Menu.menu.deleteMenu()
         }
         
         

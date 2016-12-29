@@ -14,7 +14,7 @@ class Dish : Mappable {
     var place : Place?
     var category: Category?
     var name : String?
-    var price : Int?
+    var price : Double?
     var dishDescription : String?
     
     
@@ -23,7 +23,7 @@ class Dish : Mappable {
     }
     
     
-    init ( id: Int , place : Place, category: Category,  name: String, price: Int, description: String, oneprice: Bool){
+    init ( id: Int , place : Place, category: Category,  name: String, price: Double, description: String, oneprice: Bool){
         self.id = id
         self.place = place
         self.category = category
@@ -39,7 +39,6 @@ class Dish : Mappable {
         name            <- map["name"]
         price           <- map["price"]
         dishDescription <- map["dishDescription"]
-        
     }
     
 }

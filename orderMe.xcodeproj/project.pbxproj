@@ -164,7 +164,6 @@
 		2B2EA7801CBB03C0001507DD /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				2BD06E931E13082700819268 /* New Group */,
 				2B2EA7851CBB03D6001507DD /* AppDelegate.swift */,
 				2B3A98941E061D8900AF01DC /* Cells */,
 				2B3A98931E061D7900AF01DC /* Objects */,
@@ -212,13 +211,6 @@
 				2B2EA7871CBB03D6001507DD /* BucketCell.swift */,
 			);
 			name = Cells;
-			sourceTree = "<group>";
-		};
-		2BD06E931E13082700819268 /* New Group */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "New Group";
 			sourceTree = "<group>";
 		};
 		C9DF39D983637B40F1924EE8 /* Pods */ = {

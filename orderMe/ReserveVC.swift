@@ -8,71 +8,65 @@
 
 import UIKit
 
-class ReserveVC: UIViewController, okAlertProtocol{
+class ReserveVC: UIViewController {
     
-    @IBOutlet weak var DatePicker: UIDatePicker!
+    @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var myImageView: UIImageView!
     @IBOutlet weak var phoneText: UITextField!
-    
     @IBOutlet weak var numberOfPeople: UITextField!
-    
-    
     @IBOutlet weak var nameLabel: UILabel!
     
-    var chosenDate = ""
-    var reserve : Reserve!
+    var chosenDate : String?
+    var reserve : Reserve?
     
     override func viewDidLoad() {
         self.navigationController?.isNavigationBarHidden = true
-        if let p = sTone.place {
-            myImageView.image = p.image
+        if let place = SingleTone.shareInstance.place {
+            myImageView.image = place.image
+            
+            nameLabel.text = SingleTone.shareInstance.place?.name
+            nameLabel.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         }
+       
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        navigationController?.isNavigationBarHidden = true
-     nameLabel.text = sTone.place.name
-        nameLabel.backgroundColor = UIColor.black.withAlphaComponent(0.3)
-        
+     navigationController?.isNavigationBarHidden = true
     }
     
     
     @IBAction func bookTable(_ sender: AnyObject) {
-        
         if phoneText.text == "" {
-            let alertController = UIAlertController(title: "Не хватает Вашего номера телефона", message: "Укажите, пожалуйста, Ваш номер телефона", preferredStyle: .alert)
-            
-            
-            let okAction = UIAlertAction(title: "Добавить номер", style: .default) { (action:UIAlertAction!) in
-                
-            }
-            alertController.addAction(okAction)
-            
-            self.present(alertController, animated: true, completion:nil)
+            showAlertWithOkButton(title: "We need your phone number", message: "Write your phone number, please")
+            return
+        }
+        if numberOfPeople.text == "" {
+            showAlertWithOkButton(title: "We need the number of people", message: "How many of you are going to visit \(SingleTone.shareInstance.place), please")
+            return
+        }
+        guard let phoneNumber = phoneText.text,
+              let numberPeople = Int(numberOfPeople.text!) else {
+                return
+        }
+        let date = datePicker.date
+        if date < Date() {
+            showAlertWithOkButton(title: "Error", message: "Incorrect date")
+            return
         }
         
-        let dateFormatter = DateFormatter()
+        guard let place = SingleTone.shareInstance.place else { return }
+
+        let myReserve = Reserve(id: 0, place: place, date: date, nowDate: Date(), phoneNumber: phoneNumber, numberOfPeople: numberPeople)
         
-        dateFormatter.dateFormat = "yyyy/MM/dd-HH:mm"
-        
-        let strDate = dateFormatter.string(from: DatePicker.date)
-        
-        chosenDate = strDate
-  
-        
-        let Date = Foundation.Date()
-        
-        let nowDate = dateFormatter.string(from: Date)
-        
-        let httpcon = HttpCon()
-        httpcon.okDelegate = self
-        let idPlace = sTone.place.id
-        if let phoneNumber = phoneText.text {
-        
-        httpcon.get("\(myUrl)/reserve?id=\(idPlace)&nowDate=\(nowDate)&date=\(self.chosenDate)&phoneNumber=\(phoneNumber)&numberOfPeople=\(numberOfPeople.text!)&book=true")
+        NetworkClient.makeReservation(reserve: myReserve) { (id, error) in
+            if error != nil {
+                self.errorAlert()
+                return
+            }
             
-        reserve = Reserve(placeId: idPlace, placeName: sTone.place.name, date: chosenDate,nowDate: nowDate, phoneNumber: phoneNumber, numberOfPeople: numberOfPeople.text!, book: true)
-            
+            myReserve.id = id
+            self.reserve = myReserve
+            self.successAlert()
         }
 
     }
@@ -80,50 +74,6 @@ class ReserveVC: UIViewController, okAlertProtocol{
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
         super.touchesBegan(touches, with: event)
         view.endEditing(true)
-    }
-    
-    func okAlert(){
-        //add reserve into UserDefaults
-        
-        let defaults = UserDefaults.standard
-        
-        let decoded  = defaults.object(forKey: "Reserves") as? Data ?? Data()
-        var arrayReserves = NSKeyedUnarchiver.unarchiveObject(with: decoded) as? [Reserve] ?? [Reserve]()
-        
-        arrayReserves.append(reserve)
-        
-        
-        let encodedData = NSKeyedArchiver.archivedData(withRootObject: arrayReserves)
-        
-        defaults.set(encodedData, forKey: "Reserves")
-        defaults.synchronize()
-        
-        // вывести уведомление, что стол забронирован
-        
-        
-        let alertController = UIAlertController(title: "Ваш стол забронирован!", message: "Ожидаем вас ", preferredStyle: .alert)
-        
-        
-        let okAction = UIAlertAction(title: "Окей", style: .default) { (action:UIAlertAction!) in
-            
-        }
-        alertController.addAction(okAction)
-        
-        self.present(alertController, animated: true, completion:nil)
-        
-    }
-    func notOkAlert(){
-        
-        let alertController = UIAlertController(title: "Ooops", message: "Проверьте, пожалуйста, интернет и попробуйте снова", preferredStyle: .alert)
-        
-        
-        let okAction = UIAlertAction(title: "Окей", style: .default) { (action:UIAlertAction!) in
-            
-        }
-        alertController.addAction(okAction)
-        
-        self.present(alertController, animated: true, completion:nil)
-        
     }
     
     @IBAction func backButton(_ sender: AnyObject) {
@@ -135,4 +85,37 @@ class ReserveVC: UIViewController, okAlertProtocol{
     }
     
     
+}
+
+// Alerts after request 
+extension ReserveVC {
+    func errorAlert(){
+        showAlertWithOkButton(title: "Ooops", message: "Some problems with connection. Try again")
+    }
+    
+    func successAlert() {
+        //add reserve into UserDefaults
+        let defaults = UserDefaults.standard
+        let decoded  = defaults.object(forKey: "Reserves") as? Data ?? Data()
+        var arrayReserves = NSKeyedUnarchiver.unarchiveObject(with: decoded) as? [Reserve] ?? [Reserve]()
+        guard let reserve = reserve else { return }
+        
+        arrayReserves.append(reserve)
+        let encodedData = NSKeyedArchiver.archivedData(withRootObject: arrayReserves)
+        
+        defaults.set(encodedData, forKey: "Reserves")
+        defaults.synchronize()
+        
+        showAlertWithOkButton(title: "Success!", message: "Your table was successfully booked")
+    }
+}
+
+// general Alert with OK button
+extension ReserveVC {
+    func showAlertWithOkButton(title : String, message : String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler : nil)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion:nil)
+    }
 }

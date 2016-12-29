@@ -25,7 +25,7 @@ class SingleTone : NSObject {
     static let shareInstance = SingleTone()
     
     var allplaces : [Place] = []
-    var place : Place!
+    var place : Place?
     
     var tableID = -1
 

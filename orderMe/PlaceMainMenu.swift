@@ -333,7 +333,8 @@ extension PlaceMainMenu : UITableViewDelegate {
             
         case 5 :
             openMapForPlace()
-            
+         
+        default : break
         }
         
     }

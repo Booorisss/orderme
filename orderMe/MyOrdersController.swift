@@ -8,9 +8,9 @@
 
 import UIKit
 
-class MyOrdersController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MyOrdersController: UIViewController {
     
-    var orders : [Order]! = []
+    var orders : [Order]?
     
     @IBOutlet weak var ordersTableView: UITableView!
     
@@ -29,65 +29,71 @@ class MyOrdersController: UIViewController, UITableViewDataSource, UITableViewDe
         let decoded  = defaults.object(forKey: "myOrders") as? Data ?? Data()
         let arrayOrders = NSKeyedUnarchiver.unarchiveObject(with: decoded) as? [Order] ?? [Order]()
         
-        
-//        defaults.setObject(NSData(), forKey: "myOrders")
-//        defaults.synchronize()
-        
-        
         orders = arrayOrders
         ordersTableView.reloadData()
     }
-    
-    
-    
+}
 
+
+// Mark : UITableViewDataSource
+extension MyOrdersController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-      return orders.count
+        guard let orders = orders else { return 0 }
+        return orders.count
     }
     
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "myOrderCell",for: indexPath) as? myOrderCell {
-                let order = orders[orders.count - 1 - (indexPath as NSIndexPath).row]
-                
-                cell.placeNameLabel.text = order.placeName
-                cell.dataLabel.text = order.nowDate
-                cell.sumLabel.text = order.sum.description
-                
-                return cell
+        guard let orders = orders else { return UITableViewCell() }
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "myOrderCell",for: indexPath) as? myOrderCell {
+            
+            // firstly, display last order
+            let numbetOfOrder = orders.count - 1 - (indexPath as NSIndexPath).row
+            // check the correctness of number of order
+            guard numbetOfOrder < orders.count else { return UITableViewCell() }
+            let order = orders[numbetOfOrder]
+            
+            cell.placeNameLabel.text = order.place?.name
+            cell.dataLabel.text = order.nowDate?.description
+            // sum of order
+            var sum : Double = 0
+            guard let bucket = order.bucket else { return UITableViewCell() }
+            for (dish, amount) in bucket {
+                guard let price = dish.price else { return UITableViewCell() }
+                sum += price * Double(amount)
             }
+            cell.sumLabel.text = sum.description
+            return cell
+        }
         
         return UITableViewCell()
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       
-        let order = orders[orders.count - 1 - (indexPath as NSIndexPath).row]
-        var message = ""
+}
 
-        for nameDish in order.bucket.keys{
-          message = message + nameDish + "  x"  + order.bucket[nameDish]!.description + "\n"
-        }
-        
-        
-        let alertController = UIAlertController(title: "Информация о заказе", message: message, preferredStyle: .alert)
-        
-        
-        let okAction = UIAlertAction(title: "Окей", style: .default) { (action:UIAlertAction!) in
-            
-        }
-        alertController.addAction(okAction)
-        
-        self.present(alertController, animated: true, completion:nil)
-        
+// Mark : UITableViewDelegate
+extension MyOrdersController : UITableViewDelegate {
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let orders = orders else { return }
+        // firstly, there ara last orders displayed
+        let numbetOfOrder = orders.count - 1 - (indexPath as NSIndexPath).row
+        // check the correctness of number of order
+        guard numbetOfOrder < orders.count else { return  }
         
+        let order = orders[numbetOfOrder]
         
+        guard let bucket = order.bucket else { return }
+        var message = ""
+        for dish in bucket.keys {
+            guard   let dishName = dish.name,
+                let amount = bucket[dish] else { return }
+            message = message + dishName + " - x"  + amount.description + "\n"
+        }
+        let alertController = UIAlertController(title: "Order", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion:nil)
     }
     
-
-    
-
 }

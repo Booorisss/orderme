@@ -16,7 +16,7 @@ class FutureReserve: UITableViewCell{
     
     var reserve : Reserve!
     
-    var repquestion: repeatQuest?
+    var repquestion: RepeatQuestionProtocol?
     
     
     

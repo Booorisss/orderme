@@ -19,9 +19,9 @@ class DishCell: UITableViewCell {
     
     var dish : Dish!
     
-    var cellDelegate : MyCellProtocol?
+    var cellDelegate : BucketCellProtocolAddDelete?
     
-    var infoD : infoDish?
+    var infoD : InfoDishProtocol?
     
     @IBAction func addItem(_ sender: AnyObject) {
         numberOfItems += 1

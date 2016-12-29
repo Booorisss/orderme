@@ -14,11 +14,11 @@ class BucketCell: UITableViewCell {
     @IBOutlet weak var amountLabel: UILabel!   // amount of this dish (label)
     @IBOutlet weak var priceLabel: UILabel!  // price of this dish * amount of dish
     
-    var dish : Dish!
+    var dish : Dish?
     
     var numberOfItems = 0   // amount of dish (number)
     
-    var cellDelegate : MyCellProtocol?
+    var bucketCellDelegateAddDelete : BucketCellProtocolAddDelete?
     
     
     @IBAction func addDishBut(_ sender: AnyObject) {
@@ -29,14 +29,14 @@ class BucketCell: UITableViewCell {
         let newAmount = amount + 1
         amountLabel.text = newAmount.description
         
-        guard let oldPrice = Int(priceLabel.text!) else { return }
+        guard let oldPrice = Double(priceLabel.text!) else { return }
         
-        let newPrice = newAmount != 1 ? oldPrice * newAmount / (newAmount - 1) : dish.price
+        let newPrice = newAmount != 1 ? oldPrice * Double(newAmount) / Double(newAmount - 1) : dish.price
         
         priceLabel.text = newPrice?.description
         
         Bucket.shareInstance.addDish(dish: dish) // updating Bucket
-        cellDelegate?.addDish(dish)  // updating sum label in Categories
+        bucketCellDelegateAddDelete?.addDish(dish)  // updating sum label in Categories
     }
     
     @IBAction func delDishBut(_ sender: AnyObject) {
@@ -55,7 +55,7 @@ class BucketCell: UITableViewCell {
         priceLabel.text = newPrice.description
         
         Bucket.shareInstance.deleteDish(dish: dish) // updating Bucket
-        cellDelegate?.deleteDish(dish) // updating sum label in Categories
+        bucketCellDelegateAddDelete?.deleteDish(dish) // updating sum label in Categories
         
     }
     

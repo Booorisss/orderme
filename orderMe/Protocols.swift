@@ -8,39 +8,23 @@
 
 import Foundation
 
-protocol MyCellProtocol {
+protocol BucketCellProtocolAddDelete {
     func addDish(_ dish: Dish)
     func deleteDish(_ dish: Dish)
 }
 
-protocol okAlertProtocol {
-    func okAlert()
-    func notOkAlert()
-}
 
-protocol infoDish {
+protocol InfoDishProtocol {
     func showInfoDish(_ dish: Dish)
 }
 
-protocol cancelReserve {
-    func ok(_ reserve: Reserve)
-    func notOk()
-}
 
-protocol downloadedProtocol{
-    func finished()
-}
-
-protocol repeatQuest{
+protocol RepeatQuestionProtocol{
     func repeatQuestion(_ reserve: Reserve)
 }
 
-import Foundation
-
 struct Platform {
-    
     static var isSimulator: Bool {
-        return TARGET_OS_SIMULATOR != 0 // Use this line in Xcode 7 or newer
+        return TARGET_OS_SIMULATOR != 0
     }
-    
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MakeOrderVC: UIViewController, MyCellProtocol, infoDish {
+class MakeOrderVC: UIViewController, BucketCellProtocolAddDelete, InfoDishProtocol {
     
     @IBOutlet weak var orderTableView: UITableView!
 
@@ -35,7 +35,7 @@ class MakeOrderVC: UIViewController, MyCellProtocol, infoDish {
     }
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.isNavigationBarHidden = true
-         nameLabel.text = SingleTone.shareInstance.place.name
+         nameLabel.text = SingleTone.shareInstance.place?.name
         sumLabel.text = bucket.allSum.description
         nameLabel.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         orderTableView.reloadData()

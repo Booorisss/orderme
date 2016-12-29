@@ -6,25 +6,23 @@
 //  Copyright © 2016 Boris Gurtovoy. All rights reserved.
 //
 
-import UIKit
+import ObjectMapper
 
-class Order: NSObject {
-    var idPlace = 0
-    var placeName = ""
-    var sum = 0
-    var idTable = 0
-    var bucket : [String:Int] = [:]
-    var comments = ""
-    var nowDate = ""
+class Order: Mappable {
+    var id : Int?
+    var place : Place?
+    var idTable : Int?
+    var bucket : [Dish:Int]?
+    var comments : String?
+    var nowDate : Date?
     
-    override init(){
+    required init?(map: Map) {
         
     }
     
-    init(idPlace: Int, placeName: String, sum: Int, idTable: Int, bucket: [String:Int], comments: String, nowDate: String){
-        self.idPlace = idPlace
-        self.placeName = placeName
-        self.sum = sum
+    init(id: Int, place: Place, idTable: Int, bucket: [Dish : Int], comments: String, nowDate: Date){
+        self.id = id
+        self.place = place
         self.idTable = idTable
         self.bucket = bucket
         self.comments = comments
@@ -32,44 +30,29 @@ class Order: NSObject {
         
     }
     
-    required convenience init(coder aDecoder: NSCoder) {
-        let idPlace = aDecoder.decodeInteger(forKey: "idPlace")
-        let placeName = aDecoder.decodeObject(forKey: "placeName") as! String
-        let sum = aDecoder.decodeInteger(forKey: "sum")
-        let idTable = aDecoder.decodeInteger(forKey: "idTable")
-        let bucket = aDecoder.decodeObject(forKey: "bucket") as! [String:Int]
-        let comments = aDecoder.decodeObject(forKey: "comments") as! String
-        let nowDate = aDecoder.decodeObject(forKey: "nowDate") as! String
-        
-        self.init(idPlace: idPlace, placeName: placeName, sum: sum, idTable: idTable, bucket: bucket, comments: comments, nowDate: nowDate)
+    // Mark : Mappable
+    func mapping(map: Map) {
+        id          <- map["id"]
+        place       <- map["place"]
+        idTable     <- map["idTable"]
+        bucket      <- map["bucket"]
+        comments    <- map["comments"]
+        nowDate     <- map["nowDate"]
     }
-    
-    
-    
-    func encodeWithCoder(_ aCoder: NSCoder) {
-        aCoder.encode(idPlace, forKey: "idPlace")
-        aCoder.encode(placeName, forKey: "placeName")
-        aCoder.encode(sum, forKey: "sum")
-        aCoder.encode(idTable, forKey: "idTable")
-        aCoder.encode(bucket, forKey: "bucket")
-        aCoder.encode(comments, forKey: "comments")
-        aCoder.encode(nowDate, forKey: "nowDate")
-    }
-    
-    override func isEqual(_ object: Any?) -> Bool {
-        if let object = object as? Order {
-            return idPlace == object.idPlace && placeName == object.placeName && sum == object.sum && idTable == object.idTable && bucket == object.bucket && comments == object.comments && nowDate == object.comments
-        }
-        else {
-            return false
-        }
-        
-    }
+}
 
-    
-    
-    
-    
-    
-    
+
+// Mark : Equatable
+extension Order : Equatable {
+    static func == (lhs: Order, rhs: Order) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+
+
+// Mark : Hashable
+extension Order : Hashable {
+    var hashValue : Int {
+        return self.id ?? -1
+    }
 }

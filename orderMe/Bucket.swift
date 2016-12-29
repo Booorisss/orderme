@@ -16,7 +16,7 @@ class Bucket : NSObject {
     
     var myBucket : [Dish : Int] = [:]
 
-    var allSum = 0
+    var allSum : Double = 0
     
     // add dish to Bucket
     func addDish (dish : Dish) {
