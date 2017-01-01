@@ -13,8 +13,6 @@ import FacebookCore
 
 class LoginViewController: UIViewController {
     
-    @IBOutlet weak var testLabel: UILabel!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         AccessToken.refreshCurrentToken { (accessToken, error) in
@@ -36,11 +34,10 @@ class LoginViewController: UIViewController {
               let userId = AccessToken.current?.userId else {
                 return
         }
-        let MainTabBarController = self.storyboard?.instantiateViewController(withIdentifier: "MainTabBar") as! MyTabBarController
-        
         SingleTone.shareInstance.userId = userId
         SingleTone.shareInstance.accessToken = accessToken
-        
+        let MainTabBarController = self.storyboard?.instantiateViewController(withIdentifier: "MainTabBar") as! MyTabBarController
+        MainTabBarController.selectedIndex = 1
         self.navigationController!.pushViewController(MainTabBarController, animated: true)
         
     }
@@ -49,18 +46,13 @@ class LoginViewController: UIViewController {
 extension LoginViewController : LoginButtonDelegate{
     func loginButtonDidCompleteLogin(_ loginButton: LoginButton, result: LoginResult){
         switch result {
-        case .success(_ , _ ,let accesToken):
-            print(accesToken)
-            print("Token = \(AccessToken.current?.authenticationToken)")
-            print("User ID = \(AccessToken.current?.userId)")
-            testLabel.text = "success"
+        case .success(_ , _ , _):
+            self.loginFacebook()
         case .cancelled:
             print("cancelled")
-            testLabel.text = "cancel"
             break
         case .failed(_):
-            print(" error :(")
-            testLabel.text = "failed"
+            print(" error ")
             break
         }
     }
