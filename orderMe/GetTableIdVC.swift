@@ -17,18 +17,15 @@ class GetTableIdVC: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     var videoPreviewLayer:AVCaptureVideoPreviewLayer?
     var qrCodeFrameView:UIView?
     
-    var noPlace = false
+    var noPlace = false  // there are 2 ways for this VC to appear. True if this VC appeared without choosing the place, false if firstly user picked up the place
+    var idValidationCheck = SingleTone.shareInstance.placeIdValidation // check if user is in the right place
     
     
     // Added to support different barcodes
     let supportedBarCodes = [AVMetadataObjectTypeQRCode, AVMetadataObjectTypeCode128Code, AVMetadataObjectTypeCode39Code, AVMetadataObjectTypeCode93Code, AVMetadataObjectTypeUPCECode, AVMetadataObjectTypePDF417Code, AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeAztecCode]
     
     override func viewDidLoad() {
-        
-        
-        
         super.viewDidLoad()
-        
         // Get an instance of the AVCaptureDevice class to initialize a device object and provide the video
         // as the media type parameter.
         
@@ -93,10 +90,9 @@ class GetTableIdVC: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         // Check if the metadataObjects array is not nil and it contains at least one object.
         if metadataObjects == nil || metadataObjects.count == 0 {
             qrCodeFrameView?.frame = CGRect.zero
-            messageLabel.text = "Наведите камеру на QR код"
+            messageLabel.text = "Put the camera on QR code"
             return
         }
-        
         // Get the metadata object.
         let metadataObj = metadataObjects[0] as! AVMetadataMachineReadableCodeObject
         
@@ -109,59 +105,36 @@ class GetTableIdVC: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             let barCodeObject = videoPreviewLayer?.transformedMetadataObject(for: metadataObj)
             qrCodeFrameView?.frame = barCodeObject!.bounds
             
-            if metadataObj.stringValue != nil {
-                // messageLabel.text = metadataObj.stringValue
-                
-                let sTone = SingleTone.shareInstance
-                if !noPlace {
-                    
-                    let delimiter = "_"
-                    let newstr = metadataObj.stringValue
-                    var check = newstr?.components(separatedBy: delimiter)
-                    
-                    if check?[0] == "orderme" {
-                        if let idValid = Int((check?[1])!) {
-                            if idValid == sTone.placeIdValidation {
-                                if let idTable = Int((check?[2])!) {
-                                    sTone.tableID = idTable
-                                   _ = self.navigationController?.popViewController(animated: true)
-                                }
-                            }
-                        }
-                    }
-                }
-                else {
-                    
-                    let delimiter = "_"
-                    let newstr = metadataObj.stringValue
-                    var check = newstr?.components(separatedBy: delimiter)
-                    
-                    if check?[0] == "orderme" {
-                        if let idPlace = Int((check?[1])!) {
-                        
-                                if let idTable = Int((check?[2])!) {
-                                    sTone.makePlace(idPlace)
-                                    sTone.tableID = idTable
-                                    self.noPlace = false
-                                    sTone.qrcodeWasDetected = true
-                                
-                             _ =  self.navigationController?.popViewController(animated: true)
-                                
-                                }
-                            }
-                        
-                    }
-                    
-                    
-                }
-                
+            
+            guard let stringInQrCode = metadataObj.stringValue else { return } // string, encoded in QR code
+            let delimiter = "_"
+            let arrayInQrCode = stringInQrCode.components(separatedBy: delimiter) // array from 2 parts - place Id and table Id
+            guard arrayInQrCode.count == 2 else { return } // check that array contains both parts
+            let placeIdInQrCodeString = arrayInQrCode[0] // place Id
+            let tableIdInQrCodeString = arrayInQrCode[1] // table Id
+            guard let placeIdInQrCode = Int(placeIdInQrCodeString),
+                let tableIdInQrCode = Int(tableIdInQrCodeString) else { return } // check both values are numbers
+            
+            switch noPlace {
+            case false :
+                guard idValidationCheck == placeIdInQrCode else { return }  // compare place Id from QR code with our place Id
+                SingleTone.shareInstance.tableID = tableIdInQrCode
+                _ = self.navigationController?.popViewController(animated: true)
+                break
+            case true :
+                SingleTone.shareInstance.makePlace(placeIdInQrCode)
+                SingleTone.shareInstance.tableID = tableIdInQrCode
+                self.noPlace = false
+                SingleTone.shareInstance.qrcodeWasDetected = true
+                _ =  self.navigationController?.popViewController(animated: true)
+                break
             }
         }
     }
     
     
     @IBAction func gest(_ sender: AnyObject) {
-      _ =  self.navigationController?.popViewController(animated: true)
+        _ =  self.navigationController?.popViewController(animated: true)
     }
     
     

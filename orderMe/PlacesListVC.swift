@@ -129,9 +129,12 @@ class PlacesList: UITableViewController, CLLocationManagerDelegate {
         
     }
     
+    // Mark :  CLLocationManagerDelegate
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         let myLocation = locations.last
+        
+        // update only if user moved more than on 100
         if firstLocation || lastLocation.distance(from: myLocation!) > 100  {
             for place in self.places{
                 guard let placeLatitude = place.latitude,

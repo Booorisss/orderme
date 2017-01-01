@@ -6,9 +6,6 @@
 //  Copyright © 2016 Boris Gurtovoy. All rights reserved.
 //
 //
-
-
-
 import Foundation
 
 let localUrl = "http://localhost:8080"
@@ -28,21 +25,26 @@ class SingleTone : NSObject {
     var place : Place?
     
     var tableID = -1
-
-    var categoriesOnePrice : [Int : Int] = [:]  // ids of one price categories, that are already in the bucket
-    
+   
     var placeIdValidation = -1
     
     var qrcodeWasDetected = false
     
+    var userId: String?
+    var accessToken: String?
     
+    
+    // when QR code captures the Id, we want to understand which place is this id for
     func makePlace(_ id: Int){
         for myplace in allplaces {
             if myplace.id == id {
                 place = myplace
+                break
             }
         }
     }
+    
+    
     
     
     

@@ -67,7 +67,7 @@ class PlaceMainMenu: UIViewController {
     }
     
     
-    // downloading an image (only if app did not downloaded it in the previous VC
+    // downloading an image (only if app did not downloaded it in the previous VC )
     func downloadImage(_ urlOpt : String?) {
         guard let url = urlOpt else { return }
         NetworkClient.downloadImage(url: url) { (imageOpt, error) in
