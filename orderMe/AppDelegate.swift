@@ -14,18 +14,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-      //  UIApplication.sharedApplication().statusBarStyle = .BlackOpaque
-        //Thread.sleep(forTimeInterval: 1.5)
-       /* if self.window!.rootViewController as? UITabBarController != nil {
-            let tababarController = self.window!.rootViewController as! UITabBarController
-            tababarController.selectedIndex = 1
-        }
-        */
-        
-        //return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
-        
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions:
+        [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         SDKApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         return true
     }

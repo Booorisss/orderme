@@ -51,6 +51,8 @@ class PlacesList: UITableViewController, CLLocationManagerDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         
+        //self.navigationController?.isNavigationBarHidden = true
+        
         locationManager.startUpdatingLocation()
         
         let logo = UIImage(named: "orderme")
@@ -95,6 +97,7 @@ class PlacesList: UITableViewController, CLLocationManagerDelegate {
     func getPlaces(){
         NetworkClient.getPlaces { (placesOpt, error) in
             if error != nil {
+                print("error")
                 return
             }
             guard let places = placesOpt else {
@@ -213,6 +216,7 @@ extension PlacesList {
             cell.id = myPlace.id
             cell.placeAdress.text = myPlace.address
             cell.imagePath = myPlace.imagePath
+            cell.placeName.accessibilityIdentifier = "@placeName"
             
             // if image is already downloaded
             if let image =  myPlace.image {

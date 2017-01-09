@@ -29,12 +29,12 @@ class BucketVC : UIViewController, UITextViewDelegate, UIScrollViewDelegate {
         myTableView.backgroundColor = UIColor.lightGray.withAlphaComponent(0)
         myTableView.dataSource = self
         commentText.delegate = self
+        sumLabel.accessibilityIdentifier = "@total"
     }
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.isNavigationBarHidden = true
     }
-    
     
     
     // transfer from current Bucket array of dishes and array of amounts of same dishes
@@ -158,7 +158,6 @@ extension BucketVC : UITableViewDataSource {
                 else {
                     return UITableViewCell()
             }
-            
             let price = priceOfOneDish * Double(amountOfDish)
             cell.priceLabel.text = price.description
             cell.dish = dishesInBucket?[(indexPath as NSIndexPath).row]
@@ -176,13 +175,15 @@ extension BucketVC : UITableViewDataSource {
 
 extension BucketVC : BucketCellProtocolAddDelete {
     func addDish(_ dish: Dish) {
-        //bucket.allSum += dish.price
+        guard let price = dish.price else { return }
+        Bucket.shareInstance.allSum += price
         sumLabel.text = Bucket.shareInstance.allSum.description
         //myTableView.reloadData()
-        
     }
+    
     func deleteDish(_ dish: Dish) {
-        //  bucket.allSum -= dish.price
+        guard let price = dish.price else { return }
+        Bucket.shareInstance.allSum -= price
         sumLabel.text = Bucket.shareInstance.allSum.description
         //myTableView.reloadData()
     }

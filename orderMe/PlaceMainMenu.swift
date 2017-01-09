@@ -27,7 +27,6 @@ class PlaceMainMenu: UIViewController {
     // menu, that will be downloaded async later
     var menu : Menu? = nil
     
-    
     @IBOutlet weak var labelName: UILabel!
     
     override func viewDidLoad() {
@@ -111,7 +110,6 @@ class PlaceMainMenu: UIViewController {
         let shishaAction = UIAlertAction(title: "Call a hookah man", style: .default) { (action:UIAlertAction!) in
             self.callWaiterRequest(4)
         }
-        
         let otherAction = UIAlertAction(title: "Other", style: .default) { (action:UIAlertAction!) in
             self.callWaiterRequest(5)
         }
@@ -157,12 +155,7 @@ class PlaceMainMenu: UIViewController {
         alertController.addAction(okAction)
         self.present(alertController, animated: true, completion:nil)
     }
-    
-    
-    
-    
-    
-    
+
     
     @IBAction func backButton(_ sender: AnyObject) {
         _ =  navigationController?.popViewController(animated: true)
@@ -311,7 +304,8 @@ extension PlaceMainMenu : UITableViewDelegate {
             
         case 4 :
             let phoneNumber = actions[4]
-            let alertController = UIAlertController(title: "Call \(place.name)", message: "Call \(phoneNumber)?", preferredStyle: .alert)
+            guard let placeName = place.name else { return }
+            let alertController = UIAlertController(title: "Call \(placeName)", message: "Call \(phoneNumber)?", preferredStyle: .alert)
             
             let okAction = UIAlertAction(title: "Yes", style: .default) { (action:UIAlertAction!) in
                 
@@ -325,7 +319,6 @@ extension PlaceMainMenu : UITableViewDelegate {
             let cancelAction = UIAlertAction(title: "Cancel", style: .default) { (action:UIAlertAction!) in
                 
             }
-            
             alertController.addAction(okAction)
             alertController.addAction(cancelAction)
             self.present(alertController, animated: true, completion:nil)

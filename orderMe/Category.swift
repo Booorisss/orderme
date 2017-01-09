@@ -7,7 +7,7 @@
 //
 import ObjectMapper
 
-class Category : Mappable {
+class Category : Mappable{
     var id : Int?
     var place : Place?
     var name : String?
@@ -16,18 +16,18 @@ class Category : Mappable {
         
     }
     
-    init ( id: Int , place : Place, name: String){
+    init (id: Int , place : Place, name: String){
         self.id = id
         self.place = place
         self.name = name
-        
     }
     
     // Mark : Mappable
     func mapping(map: Map) {
-        id             <- map["id"]
-        place          <- map["place"]
-        name           <- map["name"]
+        id   <- map["id"]
+        name   <- map["name"]
+        place <- (map["place_id"], PlaceIdJsonTransform())
+        
     }
     
 }
@@ -48,3 +48,5 @@ extension Category : Hashable {
         return self.id ?? -1
     }
 }
+
+

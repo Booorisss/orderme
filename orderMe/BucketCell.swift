@@ -58,7 +58,5 @@ class BucketCell: UITableViewCell {
         bucketCellDelegateAddDelete?.deleteDish(dish) // updating sum label in Categories
         
     }
-    
-    
-    
+ 
 }

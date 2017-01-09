@@ -38,26 +38,34 @@ class CategoriesVC: UIViewController {
         nameLabel.text = SingleTone.shareInstance.place?.name
         nameLabel.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         sumLabel.text = bucket.allSum.description
-        guard let menu = self.menu else { return }
-        let keys = menu.menu!.keys
-        categoriesArray = Array(keys)
+        guard let categories = self.menu?.categories else { return }
+        
+        categoriesArray = categories
     }
     
     
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let cell = sender as? CategoryCell else { return }
-        guard let Order = segue.destination as? MakeOrderVC else  { return }
+        guard let cell = sender as? CategoryCell,
+              let Order = segue.destination as? MakeOrderVC,
+              let categoryNameText = cell.categoryName.text
+                        else  { return }
         
-            if let categoryNameText = cell.categoryName.text {
                 Order.title = categoryNameText  // name of chosen category
                 Order.category = cell.category    // category
-                let chosenMenu = menu?.menu?[cell.category]
-                Order.menu = chosenMenu
+        
+                var dishesInCategory : [Dish] = []
+                guard let dishes = menu?.dishes else { return }
+                    for dish in dishes {
+                        if dish.category_id == cell.category.id {
+                            dishesInCategory.append(dish)
+                        }
+                    }
+        
+                Order.menu = dishesInCategory
                 let backItem = UIBarButtonItem()
                 backItem.title = ""
                 navigationItem.backBarButtonItem = backItem
-            }
+        
     }
     
     @IBAction func backButton(_ sender: AnyObject) {

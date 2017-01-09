@@ -33,6 +33,8 @@
 		2B3A98911E061B2100AF01DC /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B3A98901E061B2100AF01DC /* NetworkClient.swift */; };
 		2B3A98961E0631DC00AF01DC /* CallWaiterReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B3A98951E0631DC00AF01DC /* CallWaiterReason.swift */; };
 		2B46285F1E170FC400B5F011 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B46285E1E170FC400B5F011 /* LoginViewController.swift */; };
+		2B665C431E2301DB005C4651 /* PlaceTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B665C421E2301DB005C4651 /* PlaceTransform.swift */; };
+		2B665C4D1E233E1F005C4651 /* OrderMEUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B665C4C1E233E1F005C4651 /* OrderMEUITests.swift */; };
 		2B982BA21D02335400151D88 /* MyOrdersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B982BA11D02335400151D88 /* MyOrdersController.swift */; };
 		2B982BA41D0240AB00151D88 /* myOrderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B982BA31D0240AB00151D88 /* myOrderCell.swift */; };
 		2BD9637E1CEDDE2B007913B0 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD9637D1CEDDE2B007913B0 /* Order.swift */; };
@@ -44,6 +46,16 @@
 		2BF4D4201CC6DCEF0086ED1E /* UIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BF4D41F1CC6DCEF0086ED1E /* UIExtensions.swift */; };
 		E8E4BF6160F8C100D1B12500 /* Pods_orderMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BAD16F67A289A8CEBEDC646 /* Pods_orderMe.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2B665C4F1E233E1F005C4651 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2B2EA7611CBB0377001507DD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2B2EA7681CBB0377001507DD;
+			remoteInfo = orderMe;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		1BAD16F67A289A8CEBEDC646 /* Pods_orderMe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_orderMe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -76,6 +88,10 @@
 		2B3A98901E061B2100AF01DC /* NetworkClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
 		2B3A98951E0631DC00AF01DC /* CallWaiterReason.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallWaiterReason.swift; sourceTree = "<group>"; };
 		2B46285E1E170FC400B5F011 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		2B665C421E2301DB005C4651 /* PlaceTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceTransform.swift; sourceTree = "<group>"; };
+		2B665C4A1E233E1E005C4651 /* OrderMEUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OrderMEUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B665C4C1E233E1F005C4651 /* OrderMEUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderMEUITests.swift; sourceTree = "<group>"; };
+		2B665C4E1E233E1F005C4651 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2B982BA11D02335400151D88 /* MyOrdersController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyOrdersController.swift; sourceTree = "<group>"; };
 		2B982BA31D0240AB00151D88 /* myOrderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = myOrderCell.swift; sourceTree = "<group>"; };
 		2BD9637D1CEDDE2B007913B0 /* Order.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
@@ -97,6 +113,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2B665C471E233E1E005C4651 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -104,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				2B2EA76B1CBB0377001507DD /* orderMe */,
+				2B665C4B1E233E1F005C4651 /* OrderMEUITests */,
 				2B2EA76A1CBB0377001507DD /* Products */,
 				C9DF39D983637B40F1924EE8 /* Pods */,
 				ED4E7941F9C50F3BEA03680F /* Frameworks */,
@@ -114,6 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				2B2EA7691CBB0377001507DD /* OrderME.app */,
+				2B665C4A1E233E1E005C4651 /* OrderMEUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -137,9 +162,9 @@
 				2B46285E1E170FC400B5F011 /* LoginViewController.swift */,
 				2BE8372A1CFF818800506130 /* MyTabBarController.swift */,
 				2B2EA7A91CBB0403001507DD /* PlacesListVC.swift */,
+				2B2EA7831CBB03D6001507DD /* PlaceMainMenu.swift */,
 				2B2EA7B61CBE4381001507DD /* SimulatorTableId.swift */,
 				2B2EA7A51CBB0403001507DD /* GetTableIdVC.swift */,
-				2B2EA7831CBB03D6001507DD /* PlaceMainMenu.swift */,
 				2B2EA7AB1CBB0403001507DD /* CategoriesVC.swift */,
 				2B2EA7AA1CBB0403001507DD /* MakeOrderVC.swift */,
 				2B2EA7A81CBB0403001507DD /* BucketVC.swift */,
@@ -163,6 +188,7 @@
 			children = (
 				2B3A98941E061D8900AF01DC /* Cells */,
 				2B3A98931E061D7900AF01DC /* Objects */,
+				2B665C411E2301BD005C4651 /* JsonTransforms */,
 				2B3A98921E061D6800AF01DC /* Networking */,
 				2B2EA78E1CBB03D6001507DD /* SingleTone.swift */,
 				2B2EA7891CBB03D6001507DD /* Bucket.swift */,
@@ -209,6 +235,23 @@
 			name = Cells;
 			sourceTree = "<group>";
 		};
+		2B665C411E2301BD005C4651 /* JsonTransforms */ = {
+			isa = PBXGroup;
+			children = (
+				2B665C421E2301DB005C4651 /* PlaceTransform.swift */,
+			);
+			name = JsonTransforms;
+			sourceTree = "<group>";
+		};
+		2B665C4B1E233E1F005C4651 /* OrderMEUITests */ = {
+			isa = PBXGroup;
+			children = (
+				2B665C4C1E233E1F005C4651 /* OrderMEUITests.swift */,
+				2B665C4E1E233E1F005C4651 /* Info.plist */,
+			);
+			path = OrderMEUITests;
+			sourceTree = "<group>";
+		};
 		C9DF39D983637B40F1924EE8 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -249,13 +292,31 @@
 			productReference = 2B2EA7691CBB0377001507DD /* OrderME.app */;
 			productType = "com.apple.product-type.application";
 		};
+		2B665C491E233E1E005C4651 /* OrderMEUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2B665C511E233E1F005C4651 /* Build configuration list for PBXNativeTarget "OrderMEUITests" */;
+			buildPhases = (
+				2B665C461E233E1E005C4651 /* Sources */,
+				2B665C471E233E1E005C4651 /* Frameworks */,
+				2B665C481E233E1E005C4651 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2B665C501E233E1F005C4651 /* PBXTargetDependency */,
+			);
+			name = OrderMEUITests;
+			productName = OrderMEUITests;
+			productReference = 2B665C4A1E233E1E005C4651 /* OrderMEUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		2B2EA7611CBB0377001507DD /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0730;
+				LastSwiftUpdateCheck = 0800;
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Boris Gurtovoy";
 				TargetAttributes = {
@@ -263,6 +324,12 @@
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = WN6V8DZ29J;
 						LastSwiftMigration = 0800;
+					};
+					2B665C491E233E1E005C4651 = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = C9Y48E93GG;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 2B2EA7681CBB0377001507DD;
 					};
 				};
 			};
@@ -280,6 +347,7 @@
 			projectRoot = "";
 			targets = (
 				2B2EA7681CBB0377001507DD /* orderMe */,
+				2B665C491E233E1E005C4651 /* OrderMEUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -291,6 +359,13 @@
 			files = (
 				2B2EA7A21CBB03F7001507DD /* Main.storyboard in Resources */,
 				2B2EA7B51CBB0542001507DD /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2B665C481E233E1E005C4651 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,6 +446,7 @@
 				2B2EA79B1CBB03D6001507DD /* PlaceCell.swift in Sources */,
 				2B2EA7991CBB03D6001507DD /* Category.swift in Sources */,
 				2B46285F1E170FC400B5F011 /* LoginViewController.swift in Sources */,
+				2B665C431E2301DB005C4651 /* PlaceTransform.swift in Sources */,
 				2B2EA7AD1CBB0403001507DD /* GetTableIdVC.swift in Sources */,
 				2B2EA7981CBB03D6001507DD /* Bucket.swift in Sources */,
 				2B3A98911E061B2100AF01DC /* NetworkClient.swift in Sources */,
@@ -385,7 +461,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2B665C461E233E1E005C4651 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B665C4D1E233E1F005C4651 /* OrderMEUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2B665C501E233E1F005C4651 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2B2EA7681CBB0377001507DD /* orderMe */;
+			targetProxy = 2B665C4F1E233E1F005C4651 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		2B2EA7791CBB0377001507DD /* Debug */ = {
@@ -517,6 +609,39 @@
 			};
 			name = Release;
 		};
+		2B665C521E233E1F005C4651 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEVELOPMENT_TEAM = C9Y48E93GG;
+				INFOPLIST_FILE = OrderMEUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = GurtCorporation.OrderMEUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = orderMe;
+			};
+			name = Debug;
+		};
+		2B665C531E233E1F005C4651 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEVELOPMENT_TEAM = C9Y48E93GG;
+				INFOPLIST_FILE = OrderMEUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = GurtCorporation.OrderMEUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = orderMe;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -537,6 +662,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		2B665C511E233E1F005C4651 /* Build configuration list for PBXNativeTarget "OrderMEUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2B665C521E233E1F005C4651 /* Debug */,
+				2B665C531E233E1F005C4651 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

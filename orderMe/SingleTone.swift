@@ -8,20 +8,13 @@
 //
 import Foundation
 
-let localUrl = "http://localhost:8080"
-let googleUrl = "http://orderme-1286.appspot.com"
-let frankfurtUrl = "http://139.59.159.173:8080/OrderMe%5FV4/"
-
-let myUrl =  frankfurtUrl
-
-
 class SingleTone : NSObject {
     
     fileprivate override init(){}
     
     static let shareInstance = SingleTone()
     
-    var allplaces : [Place] = []
+    var allplaces : [Place]?
     var place : Place?
     
     var tableID = -1
@@ -33,10 +26,13 @@ class SingleTone : NSObject {
     var userId: String?
     var accessToken: String?
     
+    var logInLater : Bool?
+    
     
     // when QR code captures the Id, we want to understand which place is this id for
     func makePlace(_ id: Int){
-        for myplace in allplaces {
+        guard let places = allplaces else { return }
+        for myplace in places {
             if myplace.id == id {
                 place = myplace
                 break

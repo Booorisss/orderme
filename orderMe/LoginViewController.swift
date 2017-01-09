@@ -15,6 +15,7 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.isNavigationBarHidden = true
         AccessToken.refreshCurrentToken { (accessToken, error) in
             if AccessToken.current != nil {
                 self.loginFacebook()
@@ -22,25 +23,35 @@ class LoginViewController: UIViewController {
             else
             {
                 let loginButton = LoginButton(readPermissions: [ .publicProfile, .email ])
-                loginButton.center = CGPoint(x: UIScreen.main.bounds.size.width / 2, y: UIScreen.main.bounds.size.height * 0.95)
+                loginButton.center = CGPoint(x: UIScreen.main.bounds.size.width / 2, y: UIScreen.main.bounds.size.height * 0.9)
                 loginButton.delegate = self
                 self.view.addSubview(loginButton)
             }
         }
     }
     
-    func loginFacebook() {
+    func loginFacebook(later: Bool = false) {
+        if !later {
         guard let accessToken = AccessToken.current?.authenticationToken,
               let userId = AccessToken.current?.userId else {
                 return
         }
         SingleTone.shareInstance.userId = userId
         SingleTone.shareInstance.accessToken = accessToken
+        }
+        else {
+            SingleTone.shareInstance.logInLater = true
+        }
         let MainTabBarController = self.storyboard?.instantiateViewController(withIdentifier: "MainTabBar") as! MyTabBarController
         MainTabBarController.selectedIndex = 1
         self.navigationController!.pushViewController(MainTabBarController, animated: true)
         
     }
+    
+    @IBAction func logInLaterButton(_ sender: AnyObject) {
+        loginFacebook(later: true)
+    }
+    
 }
 
 extension LoginViewController : LoginButtonDelegate{

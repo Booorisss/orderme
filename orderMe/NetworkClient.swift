@@ -13,10 +13,10 @@ import ObjectMapper
 import AlamofireImage
 
 
-let server_url : String = "http://46.101.233.207:80/"
-let base_url: String = server_url
+let server_url : String = "http://46.101.233.207:80"
+//let base_url: String = server_url
 
-//let base_url: String = "http://localhost:8080/"
+let base_url: String = "http://localhost:8080"
 
 
 class NetworkClient {
@@ -67,7 +67,7 @@ class NetworkClient {
             completion(places, nil)
         }
         
-        send(api: "/getplaces", method: .get, parameters: nil, token: "", completion: response_completion )
+        send(api: "/places", method: .get, parameters: nil, token: "", completion: response_completion )
         
     }
     
@@ -110,7 +110,7 @@ class NetworkClient {
     }
     
     
-    // getting a Menu - [ Category : [Dish] ]
+    // get a Menu
     static func getMenu(placeId: Int, completion: @escaping (_ menu: Menu?, _ error : NSError?) -> () ) {
         
         func response_completion( _ response_result: String? , response_error: NSError? ) -> Void {
@@ -120,16 +120,35 @@ class NetworkClient {
             }
             
             guard let menuJson = response_result else {
+                completion(nil, NSError())
                 return
             }
             let menu : Menu? = Mapper<Menu>().map(JSONString: menuJson)
             
-            completion(menu, nil)
+            guard let categories = menu?.categories,
+                  let dishes = menu?.dishes  else {
+                completion(nil, NSError())
+                return
+            }
             
+            var newDishes : [Dish] = []
+            for dish in dishes {
+                
+                let categoryId = dish.category_id
+                
+                for category in categories {
+                    if categoryId == category.id {
+                        dish.category = category
+                        newDishes.append(dish)
+                    }
+                }
+            }
+            menu?.dishes = newDishes
+            completion(menu, nil)
             
         }
         
-        send(api: "/getmenu?placeId=\(placeId)", method: .get, parameters: nil, token: "", completion: response_completion )
+        send(api: "/menu/\(placeId)", method: .get, parameters: nil, token: "", completion: response_completion )
         
     }
     

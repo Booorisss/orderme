@@ -8,7 +8,7 @@
 
 import ObjectMapper
 
-class Place : Mappable{
+public class Place : Mappable{
     
     var id : Int?
     var name: String?
@@ -22,7 +22,7 @@ class Place : Mappable{
     
     var distance: Double?  = -1 // distance User-Place
     
-    required init?(map: Map) {
+    required public init?(map: Map) {
         
     }
     
@@ -39,7 +39,7 @@ class Place : Mappable{
 
     // Mark: Mappable
     
-    func mapping(map: Map) {
+    public func mapping(map: Map) {
         id          <- map["id"]
         name        <- map["name"]
         address     <- map["address"]
@@ -55,7 +55,7 @@ class Place : Mappable{
 
 // Mark :  Equatable
 extension Place: Equatable {
-    static func ==(lhs:Place, rhs:Place) -> Bool {
+    public static func ==(lhs:Place, rhs:Place) -> Bool {
         return lhs.id == rhs.id
     }
 }

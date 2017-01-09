@@ -11,34 +11,32 @@ import ObjectMapper
 class Dish : Mappable {
     
     var id : Int?
-    var place : Place?
     var category: Category?
     var name : String?
     var price : Double?
     var dishDescription : String?
     
+    var category_id : Int?
     
     required init?(map: Map) {
         
     }
     
-    
-    init ( id: Int , place : Place, category: Category,  name: String, price: Double, description: String, oneprice: Bool){
+    init ( id: Int , category: Category? = nil,  name: String, price: Double, description: String, category_id: Int? = nil){
         self.id = id
-        self.place = place
         self.category = category
         self.name = name
         self.price = price
         self.dishDescription = description
+        self.category_id = category_id
     }
   
     func mapping(map: Map) {
         id              <- map["id"]
-        place           <- map["place"]
-        category        <- map["category"]
+        category_id     <- map["category_id"]
         name            <- map["name"]
         price           <- map["price"]
-        dishDescription <- map["dishDescription"]
+        dishDescription <- map["dishdescription"]
     }
     
 }

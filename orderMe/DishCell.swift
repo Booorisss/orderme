@@ -45,10 +45,12 @@ class DishCell: UITableViewCell {
     func addToBucket(_ sender: AnyObject) {
         guard let dish = dish else { return }
         Bucket.shareInstance.addDish(dish: dish)
+        cellDelegate?.addDish(dish)
     }
     
     func deleteFromBucket(_ sender: AnyObject) {
         guard let dish = dish else { return }
         Bucket.shareInstance.deleteDish(dish: dish)
+        cellDelegate?.deleteDish(dish)
     }
 }

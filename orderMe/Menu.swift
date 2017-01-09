@@ -12,19 +12,25 @@ import ObjectMapper
 class Menu: Mappable {
    
     var menu : [Category : [Dish]]?
- 
+    
+    var categories : [Category]?
+    var dishes : [Dish]?
+    
+    
     required init?(map: Map) {
         
     }
     
-    init (menu : [Category : [Dish]]){
-        self.menu = menu
+    init (categories: [Category], dishes: [Dish]){
+        self.categories = categories
+        self.dishes = dishes
         
     }
     
     // Mark : Mappable
     func mapping(map: Map) {
-        menu  <- map["menu"]
+        categories  <- map["categories"]
+        dishes       <- map["dishes"]
     }
     
     
