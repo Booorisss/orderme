@@ -20,7 +20,7 @@ let base_url: String = "http://localhost:8080"
 
 
 class NetworkClient {
-
+    
     static let dateFormatter = DateFormatter() // for converting Dates to string
     
     // general request to the API, each function here will use this one
@@ -31,7 +31,7 @@ class NetworkClient {
             "Accept": "application/json",
             "Authorization": "Token " + token
         ]
-
+        
         let url = (base_url + api) as URLConvertible
         
         
@@ -126,9 +126,9 @@ class NetworkClient {
             let menu : Menu? = Mapper<Menu>().map(JSONString: menuJson)
             
             guard let categories = menu?.categories,
-                  let dishes = menu?.dishes  else {
-                completion(nil, NSError())
-                return
+                let dishes = menu?.dishes  else {
+                    completion(nil, NSError())
+                    return
             }
             
             var newDishes : [Dish] = []
@@ -161,34 +161,43 @@ class NetworkClient {
                 completion(nil, response_error)
                 return
             }
-            guard let id = Int(response_result!) else {
-                completion(nil, response_error)
-                return
+            if let jsonOrder = response_result  {
+                if let order = Order(JSONString: jsonOrder) {
+                    if let id = order.id  {
+                        completion(id, nil)
+                        return
+                    }
+                }
             }
-            completion(id, nil)
+            completion(nil, NSError())
+            return
         }
         
         // make new bucket from DishId - Amount
         guard let oldBucket = order.bucket  else { return }
-        var newBucket : [Int: Int] = [:]
+        var newBucket : [String: Int] = [:]
         for (dish, amount) in oldBucket {
             guard let id = dish.id else { completion(nil, NSError())
                 return }
-            newBucket[id] = amount
+            newBucket[String(id)] = amount
         }
-        
         // make String Date
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         let nowDate = dateFormatter.string(from: Date())
-
- 
-        let parameters = ["idPlace" : order.place?.id,
-                          "idTable" : SingleTone.shareInstance.tableID,
-                          "bucket"  : newBucket,
-                          "comments" : order.comments,
-                          "date" : nowDate ] as [String : Any]
         
-        send(api: "/makeOrder", method: .post, parameters: parameters, token: "", completion: response_completion)
+        guard let comments = order.comments,
+            let id = order.place?.id      else {
+                completion(nil, NSError())
+                return
+        }
+        
+        let parameters = ["place_id" : id,
+                          "idtable" : SingleTone.shareInstance.tableID,
+                          "bucket"  : newBucket,
+                          "comments" : comments,
+                          "created" : nowDate ] as [String : Any]
+        
+        send(api: "/menu/order", method: .post, parameters: parameters, token: "", completion: response_completion)
         
     }
     
@@ -201,32 +210,40 @@ class NetworkClient {
                 completion(nil, response_error)
                 return
             }
-            guard let id = Int(response_result!) else {
-                completion(nil, response_error)
-                return
+            if let jsonReserve = response_result  {
+                if let reserve = Reserve(JSONString: jsonReserve) {
+                    if let id = reserve.id  {
+                        completion(id, nil)
+                        return
+                    }
+                }
             }
-            completion(id, nil)
-        }
-        
-        // make String Dates
-        guard let dateForReservation = reserve.date else {
             completion(nil, NSError())
             return
         }
         
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        // make String Dates
+        guard let dateForReservation = reserve.date,
+            let id = reserve.place?.id,
+            let phoneNumber = reserve.phoneNumber,
+            let people = reserve.numberOfPeople else {
+                completion(nil, NSError())
+                return
+        }
         
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         let date = dateFormatter.string(from : dateForReservation)
         let nowDate = dateFormatter.string(from: Date())
-   
-        let parameters = ["idPlace" : reserve.place?.id,
-                          "date"  : date,
-                          "nowDate" : nowDate,
-                          "phoneNumber" : reserve.phoneNumber,
-                          "numberOfPeople" : reserve.numberOfPeople
-                          ] as [String : Any]
         
-        send(api: "/makeReservation", method: .post, parameters: parameters, token: "", completion: response_completion)
+        
+        let parameters = ["place_id" : id,
+                          "date"  : date,
+                          "created" : nowDate,
+                          "phonenumber" : phoneNumber,
+                          "numberofpeople" : people
+            ] as [String : Any]
+        
+        send(api: "/places/reserve", method: .post, parameters: parameters, token: "", completion: response_completion)
         
     }
     

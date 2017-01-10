@@ -33,11 +33,11 @@ class Order: Mappable {
     // Mark : Mappable
     func mapping(map: Map) {
         id          <- map["id"]
-        place       <- map["place"]
-        idTable     <- map["idTable"]
+        place       <- (map["place_id"], PlaceIdJsonTransform())
+        idTable     <- map["idtable"]
         bucket      <- map["bucket"]
         comments    <- map["comments"]
-        nowDate     <- map["nowDate"]
+        nowDate     <- map["created"]
     }
 }
 

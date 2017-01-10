@@ -32,11 +32,11 @@ class Reserve : Mappable{
     // Mark : Mappable
     func mapping(map: Map) {
         id              <- map["id"]
-        place           <- map["place"]
+        place           <- (map["place_id"], PlaceIdJsonTransform())
         date            <- map["date"]
-        nowDate         <- map["nowDate"]
-        phoneNumber     <- map["phoneNumber"]
-        numberOfPeople  <- map["numberOfPeople"]
+        nowDate         <- map["created"]
+        phoneNumber     <- map["phonenumber"]
+        numberOfPeople  <- map["numberofpeople"]
     }
     
 }

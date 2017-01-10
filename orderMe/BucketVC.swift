@@ -21,7 +21,6 @@ class BucketVC : UIViewController, UITextViewDelegate, UIScrollViewDelegate {
     
     var myOrder : Order?
     
-    
     override func viewDidLoad() {
         sumLabel.text = Bucket.shareInstance.allSum.description  // show current sum from Bucket
         makeBucket()
@@ -29,7 +28,6 @@ class BucketVC : UIViewController, UITextViewDelegate, UIScrollViewDelegate {
         myTableView.backgroundColor = UIColor.lightGray.withAlphaComponent(0)
         myTableView.dataSource = self
         commentText.delegate = self
-        sumLabel.accessibilityIdentifier = "@total"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -122,7 +120,7 @@ class BucketVC : UIViewController, UITextViewDelegate, UIScrollViewDelegate {
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         if let comments = commentText.text {
-            if comments == "Дополнительные комментарии к заказу: " {
+            if comments == "Your comments: " {
                 commentText.text = ""
             }
         }
@@ -195,15 +193,6 @@ extension BucketVC {
     func succesAlert(){
         deleteAll(0 as AnyObject)
         showAlertWithOkButton(title: "Success!", message: "Your order was successfully sent to the kitchen")
-   
-        let defaults = UserDefaults.standard
-        let decoded  = defaults.object(forKey: "myOrders") as? Data ?? Data()
-        var arrayOrders = NSKeyedUnarchiver.unarchiveObject(with: decoded) as? [Order] ?? [Order]()
-        guard let myOrder = myOrder else { return }
-        arrayOrders.append(myOrder)
-        let encodedData = NSKeyedArchiver.archivedData(withRootObject: arrayOrders)
-        defaults.set(encodedData, forKey: "myOrders")
-        defaults.synchronize()
     }
     
     func errorAlert(){

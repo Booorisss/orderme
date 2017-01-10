@@ -30,9 +30,8 @@ class MakeOrderVC: UIViewController, BucketCellProtocolAddDelete, InfoDishProtoc
         }
         
         self.orderTableView.dataSource = self
-        self.sumLabel.accessibilityIdentifier = "@sumLabel"
-        
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.isNavigationBarHidden = true
         nameLabel.text = SingleTone.shareInstance.place?.name

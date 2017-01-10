@@ -16,6 +16,8 @@ class ReserveVC: UIViewController {
     @IBOutlet weak var numberOfPeople: UITextField!
     @IBOutlet weak var nameLabel: UILabel!
     
+    @IBOutlet weak var bookButton: UIButton!
+    
     var chosenDate : String?
     var reserve : Reserve?
     
@@ -36,6 +38,7 @@ class ReserveVC: UIViewController {
     
     
     @IBAction func bookTable(_ sender: AnyObject) {
+        bookButton.isEnabled = false
         if phoneText.text == "" {
             showAlertWithOkButton(title: "We need your phone number", message: "Write your phone number, please")
             return
@@ -63,7 +66,6 @@ class ReserveVC: UIViewController {
                 self.errorAlert()
                 return
             }
-            
             myReserve.id = id
             self.reserve = myReserve
             self.successAlert()
@@ -90,22 +92,12 @@ class ReserveVC: UIViewController {
 // Alerts after request 
 extension ReserveVC {
     func errorAlert(){
+        bookButton.isEnabled = true
         showAlertWithOkButton(title: "Ooops", message: "Some problems with connection. Try again")
     }
     
     func successAlert() {
-        //add reserve into UserDefaults
-        let defaults = UserDefaults.standard
-        let decoded  = defaults.object(forKey: "Reserves") as? Data ?? Data()
-        var arrayReserves = NSKeyedUnarchiver.unarchiveObject(with: decoded) as? [Reserve] ?? [Reserve]()
-        guard let reserve = reserve else { return }
-        
-        arrayReserves.append(reserve)
-        let encodedData = NSKeyedArchiver.archivedData(withRootObject: arrayReserves)
-        
-        defaults.set(encodedData, forKey: "Reserves")
-        defaults.synchronize()
-        
+        bookButton.isEnabled = true
         showAlertWithOkButton(title: "Success!", message: "Your table was successfully booked")
     }
 }
