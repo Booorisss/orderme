@@ -25,6 +25,7 @@ class PlaceCell: UITableViewCell {
     func downloadImage(_ url : String) {
         NetworkClient.downloadImage(url: url) { (imageOpt, error) in
             if error != nil {
+                print(error)
                 return
             }
             guard let image = imageOpt else {

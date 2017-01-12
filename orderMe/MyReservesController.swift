@@ -12,31 +12,60 @@ class ReservesController: UIViewController, RepeatQuestionProtocol {
     
     @IBOutlet weak var reservesTable: UITableView!
     
-    var pastReserves :[Reserve]?
-    var futureReserves: [Reserve]?
-    var deleteReserve : Reserve?
-    
+    var pastReserves :[Reserve] = []
+    var futureReserves: [Reserve] = []
     
     override func viewDidLoad() {
         reservesTable.dataSource = self
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
         loadData()
     }
     
     func loadData(){
-        // TODO download reserves from API
-        reservesTable.reloadData()
+        NetworkClient.getReservations { (reservations, error) in
+            if error != nil {
+                return
+            }
+            guard let reservs = reservations else { return }
+            
+            for reserve in reservs {
+                guard let dateOfReserve = reserve.date else { return }
+                if dateOfReserve > Date() {
+                    self.futureReserves.append(reserve)
+                } else {
+                    self.pastReserves.append(reserve)
+                }
+            }
+            self.reservesTable.reloadData()
+        }
+        
     }
     
  
     func repeatQuestion(_ reserve: Reserve){
-        let alertController = UIAlertController(title: "Cancel", message: "Are you sure that you want to cancel your reservation in \(reserve.place?.name)?" , preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "Хочу отменить", style: .default) { (action:UIAlertAction!) in
-        self.deleteReserve = reserve
-        
-        // TODO send to api cancelation of reserve
+        guard let name = reserve.place?.name else { return }
+        let alertController = UIAlertController(title: "Cancel", message: "Are you sure that you want to cancel your reservation in \(name)?" , preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Yes, cancel", style: .default) { (action:UIAlertAction!) in
+            guard let id = reserve.id else { return }
+        NetworkClient.deleteReservation(id: id, completion: { (success, error) in
+            if error != nil {
+                self.notOkAlert()
+            }
+            self.okAlert()
+            var i = 0
+            for futureReserve in self.futureReserves {
+                guard let reserveId = reserve.id,
+                    let futureReserveId = futureReserve.id else {
+                    return
+                }
+                if reserveId == futureReserveId {
+                    self.futureReserves.remove(at: i)
+                    self.reservesTable.reloadData()
+                    break
+                }
+                i += 1
+            }
+            
+        })
             
         }
         let cancelAction = UIAlertAction(title: "I don`t want to cancel", style: .default, handler: nil)
@@ -48,33 +77,11 @@ class ReservesController: UIViewController, RepeatQuestionProtocol {
     
     
     func okAlert(){
-        let defaults = UserDefaults.standard
-        
-        let decoded  = defaults.object(forKey: "Reserves") as? Data ?? Data()
-        var arrayReserves = NSKeyedUnarchiver.unarchiveObject(with: decoded) as? [Reserve] ?? [Reserve]()
-        
-        var i = 0
-        for res in arrayReserves {
-            if res == deleteReserve {
-                arrayReserves.remove(at: i)
-            }
-            i = i + 1
-        }
-        
-        let encodedData = NSKeyedArchiver.archivedData(withRootObject: arrayReserves)
-        
-        defaults.set(encodedData, forKey: "Reserves")
-        defaults.synchronize()
-        loadData()
-        
         showAlert(title: "Cancelation", message: "Thank you! Your reservation was canceled")
-        
-        
     }
     
     func notOkAlert() {
         showAlert(title: "Ooops", message: "Some problems with connection")
-
     }
     
     func showAlert(title: String, message: String) {
@@ -111,10 +118,6 @@ extension ReservesController : UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let pastReserves = pastReserves,
-            let futureReserves = futureReserves else {
-                return 0
-        }
         if section == 0 {
             return futureReserves.count
         }
@@ -125,19 +128,16 @@ extension ReservesController : UITableViewDataSource{
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        guard let pastReserves = pastReserves,
-            let futureReserves = futureReserves else {
-                return UITableViewCell()
-        }
-        
         switch ((indexPath as NSIndexPath).section) {
         case 0  :  // Future cells
             if let cell = tableView.dequeueReusableCell(withIdentifier: "FutureCell",for: indexPath) as? FutureReserve {
                 let myreserve = futureReserves[(indexPath as NSIndexPath).row]
                 
                 cell.placename.text = myreserve.place?.name
-                cell.data.text = myreserve.date?.description
+                guard let dateOfReservation = myreserve.date else {
+                    return UITableViewCell()
+                }
+                cell.data.text = dateOfReservation.makeDateRepresentation()
                 cell.reserve = myreserve
                 cell.repquestion = self
                 return cell
@@ -145,10 +145,13 @@ extension ReservesController : UITableViewDataSource{
         
         case 1  : // Past cells
             if let cell = tableView.dequeueReusableCell(withIdentifier: "PastCell",for: indexPath) as? PastReserve {
-                let numberOfPastReserveInArray = (indexPath as NSIndexPath).row - futureReserves.count
+                let numberOfPastReserveInArray = (indexPath as NSIndexPath).row
                 let myreserve = pastReserves[numberOfPastReserveInArray]
                 cell.placeName.text = myreserve.place?.name
-                cell.data.text = myreserve.date?.description
+                guard let dateOfReservation = myreserve.date else {
+                    return UITableViewCell()
+                }
+                cell.data.text = dateOfReservation.makeDateRepresentation()
                 
                 return cell
             }
@@ -156,5 +159,18 @@ extension ReservesController : UITableViewDataSource{
         default : return UITableViewCell()
         }
         return UITableViewCell()
+    }
+    
+}
+
+extension Date {
+    func makeDateRepresentation() -> String {
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: self)
+        let minutes = calendar.component(.minute, from: self)
+        let day = calendar.component(.day, from: self)
+        let month = calendar.component(.month, from: self)
+        let year = calendar.component(.year, from: self)
+        return "\(month).\(day).\(year)  \(hour):\(minutes)"
     }
 }

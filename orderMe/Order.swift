@@ -14,19 +14,21 @@ class Order: Mappable {
     var idTable : Int?
     var bucket : [Dish:Int]?
     var comments : String?
-    var nowDate : Date?
+    var created : Date?
+    var sum : Double?
     
     required init?(map: Map) {
         
     }
     
-    init(id: Int, place: Place, idTable: Int, bucket: [Dish : Int], comments: String, nowDate: Date){
+    init(id: Int, place: Place, idTable: Int, bucket: [Dish : Int], comments: String, created: Date, sum : Double){
         self.id = id
         self.place = place
         self.idTable = idTable
         self.bucket = bucket
         self.comments = comments
-        self.nowDate = nowDate
+        self.created = created
+        self.sum = sum
         
     }
     
@@ -37,7 +39,8 @@ class Order: Mappable {
         idTable     <- map["idtable"]
         bucket      <- map["bucket"]
         comments    <- map["comments"]
-        nowDate     <- map["created"]
+        created     <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZ"))
+        sum         <- map["sum"]
     }
 }
 

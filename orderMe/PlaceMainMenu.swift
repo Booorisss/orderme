@@ -14,7 +14,7 @@ class PlaceMainMenu: UIViewController {
     let sTone = SingleTone.shareInstance
     
     @IBOutlet weak var myTableView: UITableView!
-    var place : Place!
+    var place : Place?
     
     @IBOutlet weak var placeImage: UIImageView!
     
@@ -31,23 +31,23 @@ class PlaceMainMenu: UIViewController {
     
     override func viewDidLoad() {
         
-        self.title = place.name
+        self.title = place?.name
         
-        let address = place.address ?? ""
-        let phoneNumber = place.phone ?? ""
+        let address = place?.address ?? ""
+        let phoneNumber = place?.phone ?? ""
         
         // titles of main buttons
         actions = ["Detect table","Menu", "Reservation", "Call a waiter", phoneNumber, address]
         
         // icons of main buttons
-        photosOfAction = ["qrcode","list","folkandknife","Waiter","phone","adress"]
+        photosOfAction = ["qrcode","list","folkandknife","waiter","phone","adress"]
         myTableView.dataSource = self
         myTableView.delegate = self
-        if let plImage = place.image  {
+        if let plImage = place?.image  {
             placeImage.image = plImage
         }
         else {
-            downloadImage(place.imagePath)
+            downloadImage(place?.imagePath)
         }
         
         // async loading Menu For next Viewcontroller
@@ -59,7 +59,7 @@ class PlaceMainMenu: UIViewController {
         
         navigationController?.isNavigationBarHidden = true
         //self.prefersStatusBarHidden
-        labelName.text = place.name
+        labelName.text = place?.name
         myTableView.reloadData()
         labelName.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         
@@ -79,7 +79,7 @@ class PlaceMainMenu: UIViewController {
             
             
             //DispatchQueue.main.async {
-            self.place.image = imageOpt
+            self.place?.image = imageOpt
             self.placeImage.image = image
             //}
         }
@@ -131,7 +131,7 @@ class PlaceMainMenu: UIViewController {
     // Send request with specific reason of calling waiter
     func callWaiterRequest(_ reason: Int) {
         
-        let placeId = place.id
+        let placeId = place?.id
         let date = Date()
         let idTable = SingleTone.shareInstance.tableID
         
@@ -167,8 +167,8 @@ class PlaceMainMenu: UIViewController {
     
     func openMapForPlace() {
         
-        guard let lat1  = place.latitude ,
-            let lng1  = place.longitude  else {
+        guard let lat1  = place?.latitude ,
+            let lng1  = place?.longitude  else {
                 return
         }
         
@@ -186,14 +186,14 @@ class PlaceMainMenu: UIViewController {
         ]
         let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
         let mapItem = MKMapItem(placemark: placemark)
-        mapItem.name = "\(self.place.name)"
+        mapItem.name = "\(self.place?.name)"
         mapItem.openInMaps(launchOptions: options)
         
     }
     
     
     func loadMenu(){ // async downloading menu for newxt VC
-        guard let id = place.id else { return }
+        guard let id = place?.id else { return }
         NetworkClient.getMenu(placeId: id) { (menu, error) in
             if error != nil {
                 self.showAlert(title: "Ooops", message: "Check the connection, please")
@@ -304,7 +304,7 @@ extension PlaceMainMenu : UITableViewDelegate {
             
         case 4 :
             let phoneNumber = actions[4]
-            guard let placeName = place.name else { return }
+            guard let placeName = place?.name else { return }
             let alertController = UIAlertController(title: "Call \(placeName)", message: "Call \(phoneNumber)?", preferredStyle: .alert)
             
             let okAction = UIAlertAction(title: "Yes", style: .default) { (action:UIAlertAction!) in

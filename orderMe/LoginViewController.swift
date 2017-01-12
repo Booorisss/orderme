@@ -18,7 +18,7 @@ class LoginViewController: UIViewController {
         self.navigationController?.isNavigationBarHidden = true
         AccessToken.refreshCurrentToken { (accessToken, error) in
             if AccessToken.current != nil {
-                self.loginFacebook()
+                self.loginToServerAfterFacebook()
             }
             else
             {
@@ -30,26 +30,18 @@ class LoginViewController: UIViewController {
         }
     }
     
-    func loginFacebook(later: Bool = false) {
-        if !later {
-        guard let accessToken = AccessToken.current?.authenticationToken,
-              let userId = AccessToken.current?.userId else {
-                return
+    func loginToServerAfterFacebook() {
+        guard let accessToken = AccessToken.current?.authenticationToken else { return }
+        NetworkClient.login(accessToken: accessToken) { (user, error) in
+            SingleTone.shareInstance.user = user
+            self.successLogin()
         }
-        SingleTone.shareInstance.userId = userId
-        SingleTone.shareInstance.accessToken = accessToken
-        }
-        else {
-            SingleTone.shareInstance.logInLater = true
-        }
-        let MainTabBarController = self.storyboard?.instantiateViewController(withIdentifier: "MainTabBar") as! MyTabBarController
-        MainTabBarController.selectedIndex = 1
-        self.navigationController!.pushViewController(MainTabBarController, animated: true)
+        
         
     }
-    
+
     @IBAction func logInLaterButton(_ sender: AnyObject) {
-        loginFacebook(later: true)
+        successLogin()
     }
     
 }
@@ -58,17 +50,31 @@ extension LoginViewController : LoginButtonDelegate{
     func loginButtonDidCompleteLogin(_ loginButton: LoginButton, result: LoginResult){
         switch result {
         case .success(_ , _ , _):
-            self.loginFacebook()
-        case .cancelled:
-            print("cancelled")
+            self.loginToServerAfterFacebook()
             break
-        case .failed(_):
-            print(" error ")
+        default :
+            
             break
         }
     }
     
     func loginButtonDidLogOut(_ loginButton: LoginButton){
         print("user logged out")
+    }
+}
+
+//MARK : results of login
+extension LoginViewController {
+    func errorAlert() {
+        let alertController = UIAlertController(title: "Error", message: "Sorry, some error occured. Try again later", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler : nil)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion:nil)
+    }
+    
+    func successLogin() {
+        let MainTabBarController = self.storyboard?.instantiateViewController(withIdentifier: "MainTabBar") as! MyTabBarController
+        MainTabBarController.selectedIndex = 1
+        self.navigationController!.pushViewController(MainTabBarController, animated: true)
     }
 }

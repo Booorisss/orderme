@@ -6,6 +6,7 @@
 //  Copyright © 2016 Boris Gurtovoy. All rights reserved.
 //
 //
+
 import Foundation
 
 class SingleTone : NSObject {
@@ -23,12 +24,8 @@ class SingleTone : NSObject {
     
     var qrcodeWasDetected = false
     
-    var userId: String?
-    var accessToken: String?
-    
-    var logInLater : Bool?
-    
-    
+    var user : User?
+
     // when QR code captures the Id, we want to understand which place is this id for
     func makePlace(_ id: Int){
         guard let places = allplaces else { return }
@@ -39,11 +36,6 @@ class SingleTone : NSObject {
             }
         }
     }
-    
-    
-    
-    
-    
 }
 
 

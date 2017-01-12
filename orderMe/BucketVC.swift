@@ -98,7 +98,7 @@ class BucketVC : UIViewController, UITextViewDelegate, UIScrollViewDelegate {
             }
         }
         
-        let order = Order(id: -1, place: place, idTable: SingleTone.shareInstance.tableID, bucket: Bucket.shareInstance.myBucket, comments: extraComments, nowDate: Date())
+        let order = Order(id: -1, place: place, idTable: SingleTone.shareInstance.tableID, bucket: Bucket.shareInstance.myBucket, comments: extraComments, created: Date(), sum: Bucket.shareInstance.allSum)
         
         NetworkClient.makeOrder(order: order) { (id, error) in
             if error != nil {

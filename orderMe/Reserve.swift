@@ -12,7 +12,7 @@ class Reserve : Mappable{
     var id : Int?
     var place : Place?
     var date : Date?
-    var nowDate : Date?
+    var created : Date?
     var phoneNumber : String?
     var numberOfPeople : Int?
     
@@ -20,11 +20,11 @@ class Reserve : Mappable{
         
     }
     
-    init(id : Int, place: Place, date: Date, nowDate: Date, phoneNumber: String, numberOfPeople: Int){
+    init(id : Int, place: Place, date: Date, created: Date, phoneNumber: String, numberOfPeople: Int){
         self.id = id
         self.place = place
         self.date = date
-        self.nowDate = nowDate
+        self.created = created
         self.phoneNumber = phoneNumber
         self.numberOfPeople = numberOfPeople
     }
@@ -33,8 +33,8 @@ class Reserve : Mappable{
     func mapping(map: Map) {
         id              <- map["id"]
         place           <- (map["place_id"], PlaceIdJsonTransform())
-        date            <- map["date"]
-        nowDate         <- map["created"]
+        date            <- (map["date"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZ"))
+        created         <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZ"))
         phoneNumber     <- map["phonenumber"]
         numberOfPeople  <- map["numberofpeople"]
     }

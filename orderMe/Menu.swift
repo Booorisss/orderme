@@ -10,9 +10,7 @@
 import ObjectMapper
 
 class Menu: Mappable {
-   
-    var menu : [Category : [Dish]]?
-    
+
     var categories : [Category]?
     var dishes : [Dish]?
     

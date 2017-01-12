@@ -59,7 +59,7 @@ class ReserveVC: UIViewController {
         
         guard let place = SingleTone.shareInstance.place else { return }
 
-        let myReserve = Reserve(id: 0, place: place, date: date, nowDate: Date(), phoneNumber: phoneNumber, numberOfPeople: numberPeople)
+        let myReserve = Reserve(id: 0, place: place, date: date, created: Date(), phoneNumber: phoneNumber, numberOfPeople: numberPeople)
         
         NetworkClient.makeReservation(reserve: myReserve) { (id, error) in
             if error != nil {
@@ -69,6 +69,8 @@ class ReserveVC: UIViewController {
             myReserve.id = id
             self.reserve = myReserve
             self.successAlert()
+            self.phoneText.text = ""
+            self.numberOfPeople.text = ""
         }
 
     }

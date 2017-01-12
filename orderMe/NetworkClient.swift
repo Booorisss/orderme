@@ -13,9 +13,7 @@ import ObjectMapper
 import AlamofireImage
 
 
-let server_url : String = "http://46.101.233.207:80"
-//let base_url: String = server_url
-
+//let base_url: String = "http://46.101.233.207:80"
 let base_url: String = "http://localhost:8080"
 
 
@@ -33,8 +31,7 @@ class NetworkClient {
         ]
         
         let url = (base_url + api) as URLConvertible
-        
-        
+     
         Alamofire.request(url, method: method, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
             .validate()
             .responseString { response in
@@ -94,18 +91,18 @@ class NetworkClient {
         
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         
-        let nowDate = dateFormatter.string(from: date)
+        let created = dateFormatter.string(from: date)
         
         
         let parameters = [
-            "id" : placeId,
-            "idTable" : idTable,
-            "nowDate" : nowDate,
+            "place_id" : placeId,
+            "idtable" : idTable,
+            "created" : created,
             "reason" : reason
             
             ] as [String : Any]
         
-        send(api: "/callWaiter", method: .post, parameters: parameters, token: "", completion: response_completion)
+        send(api: "/menu/waiter", method: .post, parameters: parameters, token: "", completion: response_completion)
         
     }
     
@@ -183,7 +180,7 @@ class NetworkClient {
         }
         // make String Date
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        let nowDate = dateFormatter.string(from: Date())
+        let created = dateFormatter.string(from: Date())
         
         guard let comments = order.comments,
             let id = order.place?.id      else {
@@ -191,20 +188,27 @@ class NetworkClient {
                 return
         }
         
+        guard let sum = order.sum else { return }
+        
         let parameters = ["place_id" : id,
                           "idtable" : SingleTone.shareInstance.tableID,
                           "bucket"  : newBucket,
                           "comments" : comments,
-                          "created" : nowDate ] as [String : Any]
+                          "created" : created,
+                          "sum" : sum
+                          ] as [String : Any]
         
-        send(api: "/menu/order", method: .post, parameters: parameters, token: "", completion: response_completion)
+        guard let token = SingleTone.shareInstance.user?.token else {
+            completion(nil, NSError())
+            return
+        }
+        send(api: "/menu/order", method: .post, parameters: parameters, token: token, completion: response_completion)
         
     }
     
     // make a Reservation
     static func makeReservation(reserve: Reserve, completion: @escaping (_ successId: Int?, _ error : NSError?) -> () ) {
-        
-        
+
         func response_completion( _ response_result: String? , response_error: NSError? ) -> Void {
             if response_error != nil {
                 completion(nil, response_error)
@@ -233,18 +237,113 @@ class NetworkClient {
         
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         let date = dateFormatter.string(from : dateForReservation)
-        let nowDate = dateFormatter.string(from: Date())
+        let created = dateFormatter.string(from: Date())
         
         
         let parameters = ["place_id" : id,
                           "date"  : date,
-                          "created" : nowDate,
+                          "created" : created,
                           "phonenumber" : phoneNumber,
                           "numberofpeople" : people
             ] as [String : Any]
         
-        send(api: "/places/reserve", method: .post, parameters: parameters, token: "", completion: response_completion)
-        
+        guard let token = SingleTone.shareInstance.user?.token else {
+            completion(nil, NSError())
+            return
+        }
+        send(api: "/places/reserve", method: .post, parameters: parameters, token: token, completion: response_completion)
     }
     
+    // Login to API after facebook registration
+    static func login(accessToken: String, completion: @escaping (_ user: User?, _ error : NSError?) -> () ) {
+        
+        func response_completion( _ response_result: String? , response_error: NSError? ) -> Void {
+            if response_error != nil {
+                completion(nil, response_error)
+                return
+            }
+            guard let json = response_result else {
+                completion(nil, NSError())
+                return
+            }
+            let userOpt : User? = Mapper<User>().map(JSONString: json)
+            guard let user = userOpt else {
+                completion(nil, NSError())
+                return
+            }
+            completion(user, nil)
+        }
+        
+        send(api: "/user?access_token=\(accessToken)", method: .get, parameters: nil, token: "", completion: response_completion )
+    }
+    
+    // Get all Reservations
+    static func getReservations(completion: @escaping (_ reservations: [Reserve]?, _ error : NSError?) -> () ) {
+        
+        func response_completion( _ response_result: String? , response_error: NSError? ) -> Void {
+            if response_error != nil {
+                completion(nil, response_error)
+                return
+            }
+            guard let json = response_result else {
+                completion(nil, NSError())
+                return
+            }
+            let reserves : [Reserve]? = Mapper<Reserve>().mapArray(JSONString: json)
+        
+            completion(reserves, nil)
+        }
+        
+        
+        guard let token = SingleTone.shareInstance.user?.token else {
+            completion(nil, NSError())
+            return
+        }
+        send(api: "/places/reservations", method: .get, parameters: nil, token: token, completion: response_completion )
+    }
+    
+    // Delete reservation
+    static func deleteReservation(id: Int, completion: @escaping (_ success: Bool?, _ error : NSError?) -> () ) {
+        
+        func response_completion( _ response_result: String? , response_error: NSError? ) -> Void {
+            if response_error != nil {
+                completion(nil, response_error)
+                return
+            }
+            completion(true, nil)
+        }
+
+        guard let token = SingleTone.shareInstance.user?.token else {
+            completion(nil, NSError())
+            return
+        }
+        send(api: "/places/reservations/\(id)", method: .delete, parameters: nil, token: token, completion: response_completion )
+    }
+    
+    // Get all Orders
+    static func getOrders(completion: @escaping (_ orders: [Order]?, _ error : NSError?) -> () ) {
+        
+        func response_completion( _ response_result: String? , response_error: NSError? ) -> Void {
+            if response_error != nil {
+                completion(nil, response_error)
+                return
+            }
+            guard let json = response_result else {
+                completion(nil, NSError())
+                return
+            }
+            let orders : [Order]? = Mapper<Order>().mapArray(JSONString: json)
+            
+            completion(orders, nil)
+        }
+        
+        
+        guard let token = SingleTone.shareInstance.user?.token else {
+            completion(nil, NSError())
+            return
+        }
+        send(api: "/menu/orders", method: .get, parameters: nil, token: token, completion: response_completion )
+    }
+
+
 }

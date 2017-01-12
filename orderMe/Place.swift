@@ -46,10 +46,8 @@ public class Place : Mappable{
         phone       <- map["phone"]
         latitude    <- map["latitude"]
         longitude   <- map["longitude"]
-        imagePath   <- map["imagePath"]
+        imagePath   <- map["imagepath"]
     }
-    
-    
 }
 
 

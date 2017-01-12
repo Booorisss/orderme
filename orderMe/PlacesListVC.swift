@@ -44,7 +44,6 @@ class PlacesList: UITableViewController, CLLocationManagerDelegate {
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
-        
     }
     
     
@@ -61,24 +60,20 @@ class PlacesList: UITableViewController, CLLocationManagerDelegate {
         imageView.contentMode = .scaleAspectFit
         navigationItem.titleView = imageView
         navigationController?.isNavigationBarHidden = false
-        //tableView.reloadData()
         
         
         // General Case, user did NOT read the QR code
-        
         if !SingleTone.shareInstance.qrcodeWasDetected{
             Bucket.shareInstance.myBucket = [:]
             Bucket.shareInstance.allSum = 0
             SingleTone.shareInstance.tableID = -1
-            //Menu.menu.deleteMenu()
         }
-        
-        
         
         // If User read QRCODE
         if SingleTone.shareInstance.qrcodeWasDetected {
             SingleTone.shareInstance.qrcodeWasDetected = false
             if let PlaceMainMenuVC = self.storyboard?.instantiateViewController(withIdentifier: "PlaceMainMenu") as? PlaceMainMenu {
+                PlaceMainMenuVC.place = SingleTone.shareInstance.place
                 self.navigationController?.pushViewController(PlaceMainMenuVC, animated: true)
             }
         }
@@ -156,14 +151,11 @@ class PlacesList: UITableViewController, CLLocationManagerDelegate {
                 firstLocation = false
                 
             }
-            lastLocation = myLocation!
-            
+            guard let myLoc = myLocation else { return }
+            lastLocation = myLoc
             tableView.reloadData()
         }
-        
     }
-    
-    
 }
 
 
@@ -201,8 +193,6 @@ extension PlacesList {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceCell",for: indexPath) as? PlaceCell {
-            
-            
             let myPlace : Place!
             if searchController.isActive && searchController.searchBar.text != "" {
                 myPlace = filteredPlaces[(indexPath as NSIndexPath).row]
@@ -216,18 +206,16 @@ extension PlacesList {
             cell.id = myPlace.id
             cell.placeAdress.text = myPlace.address
             cell.imagePath = myPlace.imagePath
-            cell.placeName.accessibilityIdentifier = "@placeName"
             
             // if image is already downloaded
             if let image =  myPlace.image {
                 cell.placeImage.image = image
             }
             else {  //  async downloading photo
-                if let path = myPlace.imagePath  {
+                if let path = myPlace.imagePath { 
                     cell.downloadImage(path)
                 }
             }
-            
             if myPlace.distance == -1 {
                 cell.distance.text = ""
             }
