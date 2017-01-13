@@ -48,14 +48,14 @@ class BucketCell: UITableViewCell {
         let newAmount = amount - 1
         amountLabel.text = newAmount.description
         
-        guard let oldPrice = Int(priceLabel.text!) else { return }
+        guard let oldPrice = Double(priceLabel.text!) else { return }
         
-        let newPrice = oldPrice * newAmount / (newAmount + 1)
+        let newPrice = oldPrice * Double(newAmount) / (Double(newAmount) + 1)
         
         priceLabel.text = newPrice.description
         
         Bucket.shareInstance.deleteDish(dish: dish) // updating Bucket
-        bucketCellDelegateAddDelete?.deleteDish(dish) // updating sum label in Categories
+    bucketCellDelegateAddDelete?.deleteDish(dish) // updating sum label in Categories
         
     }
  

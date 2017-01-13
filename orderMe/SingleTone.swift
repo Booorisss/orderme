@@ -25,6 +25,9 @@ class SingleTone : NSObject {
     var qrcodeWasDetected = false
     
     var user : User?
+    
+    var newReservation: NewReservationProtocol?
+    var newOrder: NewOrderProtocol?
 
     // when QR code captures the Id, we want to understand which place is this id for
     func makePlace(_ id: Int){

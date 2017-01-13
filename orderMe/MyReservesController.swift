@@ -16,8 +16,18 @@ class ReservesController: UIViewController, RepeatQuestionProtocol {
     var futureReserves: [Reserve] = []
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         reservesTable.dataSource = self
-        loadData()
+        if SingleTone.shareInstance.user != nil {
+            loadData()
+            SingleTone.shareInstance.newReservation = self
+        }
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if SingleTone.shareInstance.user == nil {
+            showAlertWithLoginFacebookOption()
+        }
     }
     
     func loadData(){
@@ -40,32 +50,32 @@ class ReservesController: UIViewController, RepeatQuestionProtocol {
         
     }
     
- 
+    
     func repeatQuestion(_ reserve: Reserve){
         guard let name = reserve.place?.name else { return }
         let alertController = UIAlertController(title: "Cancel", message: "Are you sure that you want to cancel your reservation in \(name)?" , preferredStyle: .alert)
         let okAction = UIAlertAction(title: "Yes, cancel", style: .default) { (action:UIAlertAction!) in
             guard let id = reserve.id else { return }
-        NetworkClient.deleteReservation(id: id, completion: { (success, error) in
-            if error != nil {
-                self.notOkAlert()
-            }
-            self.okAlert()
-            var i = 0
-            for futureReserve in self.futureReserves {
-                guard let reserveId = reserve.id,
-                    let futureReserveId = futureReserve.id else {
-                    return
+            NetworkClient.deleteReservation(id: id, completion: { (success, error) in
+                if error != nil {
+                    self.notOkAlert()
                 }
-                if reserveId == futureReserveId {
-                    self.futureReserves.remove(at: i)
-                    self.reservesTable.reloadData()
-                    break
+                self.okAlert()
+                var i = 0
+                for futureReserve in self.futureReserves {
+                    guard let reserveId = reserve.id,
+                        let futureReserveId = futureReserve.id else {
+                            return
+                    }
+                    if reserveId == futureReserveId {
+                        self.futureReserves.remove(at: i)
+                        self.reservesTable.reloadData()
+                        break
+                    }
+                    i += 1
                 }
-                i += 1
-            }
-            
-        })
+                
+            })
             
         }
         let cancelAction = UIAlertAction(title: "I don`t want to cancel", style: .default, handler: nil)
@@ -92,8 +102,18 @@ class ReservesController: UIViewController, RepeatQuestionProtocol {
         self.present(alertController, animated: true, completion:nil)
     }
     
-
-    
+    func showAlertWithLoginFacebookOption() {
+        let alertController = UIAlertController(title: "You did not login", message: "You need to login for viewing your reservations", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default) { (action:UIAlertAction!) in
+            self.tabBarController?.selectedIndex = 1
+        }
+        let toFacebookAction = UIAlertAction(title: "Login", style: .default) { (action: UIAlertAction) in
+            _ = self.navigationController?.popToRootViewController(animated: true)
+        }
+        alertController.addAction(cancelAction)
+        alertController.addAction(toFacebookAction)
+        self.present(alertController, animated: true, completion:nil)
+    }
 }
 
 
@@ -142,7 +162,7 @@ extension ReservesController : UITableViewDataSource{
                 cell.repquestion = self
                 return cell
             }
-        
+            
         case 1  : // Past cells
             if let cell = tableView.dequeueReusableCell(withIdentifier: "PastCell",for: indexPath) as? PastReserve {
                 let numberOfPastReserveInArray = (indexPath as NSIndexPath).row
@@ -161,6 +181,14 @@ extension ReservesController : UITableViewDataSource{
         return UITableViewCell()
     }
     
+}
+
+//MARK: NewReservationProtocol
+extension ReservesController : NewReservationProtocol {
+    func addNewReservation(reserve: Reserve) {
+        self.futureReserves.append(reserve)
+        self.reservesTable.reloadData()
+    }
 }
 
 extension Date {

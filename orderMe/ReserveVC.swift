@@ -25,7 +25,6 @@ class ReserveVC: UIViewController {
         self.navigationController?.isNavigationBarHidden = true
         if let place = SingleTone.shareInstance.place {
             myImageView.image = place.image
-            
             nameLabel.text = SingleTone.shareInstance.place?.name
             nameLabel.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         }
@@ -38,13 +37,17 @@ class ReserveVC: UIViewController {
     
     
     @IBAction func bookTable(_ sender: AnyObject) {
-        bookButton.isEnabled = false
+        
         if phoneText.text == "" {
             showAlertWithOkButton(title: "We need your phone number", message: "Write your phone number, please")
             return
         }
         if numberOfPeople.text == "" {
             showAlertWithOkButton(title: "We need the number of people", message: "How many of you are going to visit \(SingleTone.shareInstance.place), please")
+            return
+        }
+        if SingleTone.shareInstance.user == nil {
+            showAlertWithLoginFacebookOption()
             return
         }
         guard let phoneNumber = phoneText.text,
@@ -60,8 +63,9 @@ class ReserveVC: UIViewController {
         guard let place = SingleTone.shareInstance.place else { return }
 
         let myReserve = Reserve(id: 0, place: place, date: date, created: Date(), phoneNumber: phoneNumber, numberOfPeople: numberPeople)
-        
+        bookButton.isEnabled = false
         NetworkClient.makeReservation(reserve: myReserve) { (id, error) in
+            self.bookButton.isEnabled = true
             if error != nil {
                 self.errorAlert()
                 return
@@ -71,8 +75,25 @@ class ReserveVC: UIViewController {
             self.successAlert()
             self.phoneText.text = ""
             self.numberOfPeople.text = ""
+            SingleTone.shareInstance.newReservation?.addNewReservation(reserve: myReserve)
         }
 
+    }
+    
+    func showAlertWithLoginFacebookOption() {
+        let alertController = UIAlertController(title: "You did not login", message: "You need to login for making orders", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default) { (action:UIAlertAction!) in
+            
+        }
+        let toFacebookAction = UIAlertAction(title: "Login", style: .default) { (action: UIAlertAction) in
+            if let LoginVC = self.storyboard?.instantiateViewController(withIdentifier: "LoginVC") as? LoginViewController {
+                LoginVC.cameFromReserveOrOrderProcess = true
+                self.navigationController?.pushViewController(LoginVC, animated: true)
+            }
+        }
+        alertController.addAction(cancelAction)
+        alertController.addAction(toFacebookAction)
+        self.present(alertController, animated: true, completion:nil)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
@@ -94,12 +115,10 @@ class ReserveVC: UIViewController {
 // Alerts after request 
 extension ReserveVC {
     func errorAlert(){
-        bookButton.isEnabled = true
         showAlertWithOkButton(title: "Ooops", message: "Some problems with connection. Try again")
     }
     
     func successAlert() {
-        bookButton.isEnabled = true
         showAlertWithOkButton(title: "Success!", message: "Your table was successfully booked")
     }
 }

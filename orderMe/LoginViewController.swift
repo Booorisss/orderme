@@ -13,8 +13,10 @@ import FacebookCore
 
 class LoginViewController: UIViewController {
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    var cameFromReserveOrOrderProcess = false
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.navigationController?.isNavigationBarHidden = true
         AccessToken.refreshCurrentToken { (accessToken, error) in
             if AccessToken.current != nil {
@@ -36,16 +38,16 @@ class LoginViewController: UIViewController {
             SingleTone.shareInstance.user = user
             self.successLogin()
         }
-        
-        
     }
-
+    
     @IBAction func logInLaterButton(_ sender: AnyObject) {
         successLogin()
     }
     
 }
 
+
+// MARK LoginButtonDelegate
 extension LoginViewController : LoginButtonDelegate{
     func loginButtonDidCompleteLogin(_ loginButton: LoginButton, result: LoginResult){
         switch result {
@@ -59,9 +61,10 @@ extension LoginViewController : LoginButtonDelegate{
     }
     
     func loginButtonDidLogOut(_ loginButton: LoginButton){
-        print("user logged out")
+        print("User logged out")
     }
 }
+
 
 //MARK : results of login
 extension LoginViewController {
@@ -73,8 +76,17 @@ extension LoginViewController {
     }
     
     func successLogin() {
-        let MainTabBarController = self.storyboard?.instantiateViewController(withIdentifier: "MainTabBar") as! MyTabBarController
-        MainTabBarController.selectedIndex = 1
-        self.navigationController!.pushViewController(MainTabBarController, animated: true)
+        switch cameFromReserveOrOrderProcess {
+        case false:
+            if let MainTabBarController = self.storyboard?.instantiateViewController(withIdentifier: "MainTabBar") as? MyTabBarController {
+                MainTabBarController.selectedIndex = 1
+                self.navigationController!.pushViewController(MainTabBarController, animated: true)
+            }
+            break
+        case true :
+            cameFromReserveOrOrderProcess = false
+            _ = self.navigationController?.popViewController(animated: true)
+            break
+        }
     }
 }

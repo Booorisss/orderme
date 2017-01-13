@@ -75,11 +75,10 @@ class BucketVC : UIViewController, UITextViewDelegate, UIScrollViewDelegate {
             
         else { // user scanned QR code
             if Bucket.shareInstance.myBucket.isEmpty { // user did not select any dishes
-                let alertController = UIAlertController(title: "Empty order", message: "Yoy did not choose any dishes, try again", preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "OK", style: .default) { (action:UIAlertAction!) in
-                }
-                alertController.addAction(okAction)
-                self.present(alertController, animated: true, completion:nil)
+                showAlertWithOkButton(title: "Empty order", message: "You did not choose any dishes, try again")
+            }
+            else if SingleTone.shareInstance.user == nil {
+                showAlertWithLoginFacebookOption()
             }
             else { // make a request Order
                 makeRequestOrder()
@@ -87,8 +86,26 @@ class BucketVC : UIViewController, UITextViewDelegate, UIScrollViewDelegate {
         }
     }
     
+    func showAlertWithLoginFacebookOption() {
+        let alertController = UIAlertController(title: "You did not login", message: "You need to login for reservations", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default) { (action:UIAlertAction!) in
+            
+        }
+        let toFacebookAction = UIAlertAction(title: "Login", style: .default) { (action: UIAlertAction) in
+            if let LoginVC = self.storyboard?.instantiateViewController(withIdentifier: "LoginVC") as? LoginViewController {
+                LoginVC.cameFromReserveOrOrderProcess = true
+                self.navigationController?.pushViewController(LoginVC, animated: true)
+            }
+        }
+        alertController.addAction(cancelAction)
+        alertController.addAction(toFacebookAction)
+        self.present(alertController, animated: true, completion:nil)
+    }
+    
     func makeRequestOrder() {
         guard let place = SingleTone.shareInstance.place else { return }
+        
+        
         
         var extraComments = ""
         
@@ -108,6 +125,7 @@ class BucketVC : UIViewController, UITextViewDelegate, UIScrollViewDelegate {
             order.id = id
             self.myOrder = order
             self.succesAlert()
+            SingleTone.shareInstance.newOrder?.addNewOrder(order: order)
             
         }
         
@@ -173,17 +191,13 @@ extension BucketVC : UITableViewDataSource {
 
 extension BucketVC : BucketCellProtocolAddDelete {
     func addDish(_ dish: Dish) {
-        guard let price = dish.price else { return }
-        Bucket.shareInstance.allSum += price
-        sumLabel.text = Bucket.shareInstance.allSum.description
-        //myTableView.reloadData()
+        let newPrice = Bucket.shareInstance.allSum
+        sumLabel.text = newPrice.description
     }
     
     func deleteDish(_ dish: Dish) {
-        guard let price = dish.price else { return }
-        Bucket.shareInstance.allSum -= price
-        sumLabel.text = Bucket.shareInstance.allSum.description
-        //myTableView.reloadData()
+        let newPrice = Bucket.shareInstance.allSum
+        sumLabel.text = newPrice.description
     }
     
 }

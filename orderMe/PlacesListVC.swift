@@ -9,8 +9,8 @@
 import UIKit
 import Foundation
 import CoreLocation
+
 class PlacesList: UITableViewController, CLLocationManagerDelegate {
-    
     
     let searchController = UISearchController(searchResultsController: nil)
     
@@ -44,24 +44,20 @@ class PlacesList: UITableViewController, CLLocationManagerDelegate {
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
-    }
-    
-    
-    
-    override func viewWillAppear(_ animated: Bool) {
-        
-        //self.navigationController?.isNavigationBarHidden = true
-        
-        locationManager.startUpdatingLocation()
         
         let logo = UIImage(named: "orderme")
         let imageView = UIImageView(image:logo)
         imageView.frame = CGRect(x: 0,y: 0,  width: 21, height: 21)
         imageView.contentMode = .scaleAspectFit
-        navigationItem.titleView = imageView
+        navigationItem.titleView = imageView        
+    }
+    
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        locationManager.startUpdatingLocation()
         navigationController?.isNavigationBarHidden = false
-        
-        
+
         // General Case, user did NOT read the QR code
         if !SingleTone.shareInstance.qrcodeWasDetected{
             Bucket.shareInstance.myBucket = [:]

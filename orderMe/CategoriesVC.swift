@@ -46,7 +46,7 @@ class CategoriesVC: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let cell = sender as? CategoryCell,
-              let Order = segue.destination as? MakeOrderVC,
+              let Order = segue.destination as? DishesVC,
               let categoryNameText = cell.categoryName.text
                         else  { return }
         

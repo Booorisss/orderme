@@ -155,7 +155,7 @@ class PlaceMainMenu: UIViewController {
         alertController.addAction(okAction)
         self.present(alertController, animated: true, completion:nil)
     }
-
+    
     
     @IBAction func backButton(_ sender: AnyObject) {
         _ =  navigationController?.popViewController(animated: true)
@@ -186,7 +186,9 @@ class PlaceMainMenu: UIViewController {
         ]
         let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
         let mapItem = MKMapItem(placemark: placemark)
-        mapItem.name = "\(self.place?.name)"
+        if let name = self.place?.name {
+            mapItem.name = "\(name)"
+        }
         mapItem.openInMaps(launchOptions: options)
         
     }
@@ -200,7 +202,7 @@ class PlaceMainMenu: UIViewController {
             }
             
             self.menu = menu
-              // TODO make delegate to pass the menu even if user is already on the next ViewController
+            // TODO make delegate to pass the menu even if user is already on the next ViewController
             
         }
     }
@@ -267,7 +269,7 @@ extension PlaceMainMenu : UITableViewDelegate {
         switch pressedButton {
             
         case 0 :  // Detecting table ID -  if app runs on simulator go to SimulatorTableId,
-                  // else go to GetTableIdVc (QRcode scanner )
+            // else go to GetTableIdVc (QRcode scanner )
             
             if Platform.isSimulator {
                 self.navigationController!.pushViewController(self.storyboard!.instantiateViewController(withIdentifier: "simulatorTable") as! SimulatorTableId, animated: true)
@@ -280,8 +282,8 @@ extension PlaceMainMenu : UITableViewDelegate {
             
         case 1 : // open CategoriesVC for chosing menu
             if let CategoriesVC = self.storyboard!.instantiateViewController(withIdentifier: "CatVC") as? CategoriesVC {
-            CategoriesVC.menu = self.menu
-            self.navigationController!.pushViewController(CategoriesVC, animated: true)
+                CategoriesVC.menu = self.menu
+                self.navigationController!.pushViewController(CategoriesVC, animated: true)
             }
             
         case 2 : // open ReserveVC for reserving table
@@ -326,7 +328,7 @@ extension PlaceMainMenu : UITableViewDelegate {
             
         case 5 :
             openMapForPlace()
-         
+            
         default : break
         }
         

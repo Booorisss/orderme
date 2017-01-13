@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MakeOrderVC: UIViewController, BucketCellProtocolAddDelete, InfoDishProtocol {
+class DishesVC: UIViewController, BucketCellProtocolAddDelete, InfoDishProtocol {
     
     @IBOutlet weak var orderTableView: UITableView!
 
@@ -95,7 +95,7 @@ class MakeOrderVC: UIViewController, BucketCellProtocolAddDelete, InfoDishProtoc
 
 // Mark : UITableViewDelegate, UITableViewDataSource
 
-extension MakeOrderVC : UITableViewDelegate, UITableViewDataSource {
+extension DishesVC : UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let menu = menu else { return 0 }
